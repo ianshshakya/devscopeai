@@ -32,6 +32,8 @@ export const CACHE_TTL = {
 };
 
 export const AI_MODELS = {
+  gemini: 'gemini-1.5-flash',
+  groq: 'llama-3.3-70b-versatile',
   deepseek: 'deepseek-chat',
   openai: 'gpt-4o-mini',
 };

@@ -1,47 +1,102 @@
 import OpenAI from 'openai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { AI_MODELS } from '../config/constants.js';
 
-const getClient = () => {
-  const provider = process.env.AI_PROVIDER || 'deepseek';
+// ─── Gemini (Free) ────────────────────────────────────────────
+const callGemini = async (prompt) => {
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+  const model = genAI.getGenerativeModel({
+    model: 'gemini-1.5-flash',
+    generationConfig: {
+      responseMimeType: 'application/json',
+      temperature: 0.3,
+      maxOutputTokens: 3000,
+    },
+  });
 
-  if (provider === 'deepseek') {
-    return new OpenAI({
-      apiKey: process.env.DEEPSEEK_API_KEY,
-      baseURL: 'https://api.deepseek.com',
-    });
-  }
-
-  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  const result = await model.generateContent(
+    `You are a technical evaluator. Always respond with valid JSON only. No markdown, no explanations.\n\n${prompt}`
+  );
+  const text = result.response.text();
+  // Strip any accidental markdown fences
+  const clean = text.replace(/^```json?\s*/i, '').replace(/```\s*$/i, '').trim();
+  return JSON.parse(clean);
 };
 
-const getModel = () => {
-  const provider = process.env.AI_PROVIDER || 'deepseek';
-  return AI_MODELS[provider] || AI_MODELS.deepseek;
+// ─── Groq (Free) ──────────────────────────────────────────────
+const callGroq = async (prompt) => {
+  const client = new OpenAI({
+    apiKey: process.env.GROQ_API_KEY,
+    baseURL: 'https://api.groq.com/openai/v1',
+  });
+  const response = await client.chat.completions.create({
+    model: 'llama-3.3-70b-versatile',
+    messages: [
+      { role: 'system', content: 'You are a technical evaluator. Always respond with valid JSON only. No markdown, no explanations, just the JSON object.' },
+      { role: 'user', content: prompt },
+    ],
+    temperature: 0.3,
+    max_tokens: 3000,
+    response_format: { type: 'json_object' },
+  });
+  return JSON.parse(response.choices[0]?.message?.content || '{}');
 };
+
+// ─── DeepSeek ─────────────────────────────────────────────────
+const callDeepSeek = async (prompt) => {
+  const client = new OpenAI({
+    apiKey: process.env.DEEPSEEK_API_KEY,
+    baseURL: 'https://api.deepseek.com',
+  });
+  const response = await client.chat.completions.create({
+    model: 'deepseek-chat',
+    messages: [
+      { role: 'system', content: 'You are a technical evaluator. Always respond with valid JSON only.' },
+      { role: 'user', content: prompt },
+    ],
+    temperature: 0.3,
+    max_tokens: 3000,
+    response_format: { type: 'json_object' },
+  });
+  return JSON.parse(response.choices[0]?.message?.content || '{}');
+};
+
+// ─── OpenAI ───────────────────────────────────────────────────
+const callOpenAI = async (prompt) => {
+  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  const response = await client.chat.completions.create({
+    model: 'gpt-4o-mini',
+    messages: [
+      { role: 'system', content: 'You are a technical evaluator. Always respond with valid JSON only.' },
+      { role: 'user', content: prompt },
+    ],
+    temperature: 0.3,
+    max_tokens: 3000,
+    response_format: { type: 'json_object' },
+  });
+  return JSON.parse(response.choices[0]?.message?.content || '{}');
+};
+
+// ─── Router ───────────────────────────────────────────────────
+const getProvider = () => (process.env.AI_PROVIDER || 'gemini').toLowerCase();
 
 export const callAI = async (prompt, retries = 2) => {
-  const client = getClient();
-  const model = getModel();
+  const provider = getProvider();
+
+  const callers = {
+    gemini: callGemini,
+    groq: callGroq,
+    deepseek: callDeepSeek,
+    openai: callOpenAI,
+  };
+
+  const caller = callers[provider] || callers.gemini;
 
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
-      const response = await client.chat.completions.create({
-        model,
-        messages: [
-          {
-            role: 'system',
-            content: 'You are a technical evaluator. Always respond with valid JSON only. No markdown, no explanations, just the JSON object.',
-          },
-          { role: 'user', content: prompt },
-        ],
-        temperature: 0.3,
-        max_tokens: 3000,
-        response_format: { type: 'json_object' },
-      });
-
-      const content = response.choices[0]?.message?.content || '{}';
-      return JSON.parse(content);
+      return await caller(prompt);
     } catch (err) {
+      console.error(`AI call attempt ${attempt + 1} failed (${provider}):`, err.message);
       if (attempt === retries) throw err;
       await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
     }
@@ -52,8 +107,8 @@ export const analyzeWithAI = async (prompt) => {
   try {
     return await callAI(prompt);
   } catch (err) {
-    console.error('AI analysis failed:', err.message);
-    // Return sensible defaults if AI fails
+    console.error('All AI attempts failed:', err.message);
+    // Graceful fallback — basic scores from metrics only
     return {
       scores: {
         codeQuality: 40, architecture: 40, maintainability: 40,
@@ -64,7 +119,7 @@ export const analyzeWithAI = async (prompt) => {
       portfolioQuality: 35,
       industryRelevance: 40,
       strengths: ['Code is committed to version control'],
-      weaknesses: ['AI analysis temporarily unavailable'],
+      weaknesses: ['AI review temporarily unavailable — scores based on metrics only'],
       missingSkills: ['Testing', 'Documentation'],
       suggestedProjects: ['Add unit tests', 'Improve README'],
       categoryExplanations: {},
