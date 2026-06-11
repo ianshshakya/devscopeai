@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   const login = () => {
-    window.location.href = `${import.meta.env.VITE_API_URL || ''}`
+    window.location.href = `${import.meta.env.VITE_API_URL || ''}/auth/github`
   }
 
   const logout = async () => {
