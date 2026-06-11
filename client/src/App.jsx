@@ -10,6 +10,14 @@ const Roadmap = lazy(() => import('./pages/Roadmap'))
 const ComparisonEngine = lazy(() => import('./pages/ComparisonEngine'))
 const AuthCallback = lazy(() => import('./pages/AuthCallback'))
 
+// Public Pages
+const RoastPage = lazy(() => import('./pages/RoastPage'))
+const PublicScanner = lazy(() => import('./pages/PublicScanner'))
+const RoadmapGenerator = lazy(() => import('./pages/RoadmapGenerator'))
+const SkillDNA = lazy(() => import('./pages/SkillDNA'))
+const JobReadinessQuiz = lazy(() => import('./pages/JobReadinessQuiz'))
+const ProjectIdeas = lazy(() => import('./pages/ProjectIdeas'))
+
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth()
   if (loading) return <PageLoader />
@@ -37,6 +45,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
+        
+        {/* Protected Routes */}
         <Route path="/dashboard" element={
           <ProtectedRoute><Dashboard /></ProtectedRoute>
         } />
@@ -55,8 +65,18 @@ export default function App() {
         <Route path="/compare" element={
           <ProtectedRoute><ComparisonEngine /></ProtectedRoute>
         } />
+
+        {/* Public Routes */}
+        <Route path="/roast" element={<RoastPage />} />
+        <Route path="/scan" element={<PublicScanner />} />
+        <Route path="/roadmap-gen" element={<RoadmapGenerator />} />
+        <Route path="/skill-dna" element={<SkillDNA />} />
+        <Route path="/quiz" element={<JobReadinessQuiz />} />
+        <Route path="/project-ideas" element={<ProjectIdeas />} />
+
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>
   )
 }
+

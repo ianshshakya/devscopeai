@@ -13,6 +13,7 @@ import analysisRoutes from './routes/analysis.js';
 import reportRoutes from './routes/report.js';
 import roadmapRoutes from './routes/roadmap.js';
 import comparisonRoutes from './routes/comparison.js';
+import publicRoutes from './routes/public.js';
 
 dotenv.config();
 
@@ -23,8 +24,18 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 // ─── Middleware ───────────────────────────────────────────────
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  'http://localhost:5173',
+  'http://localhost:3000',
+].filter(Boolean);
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
 }));
 
@@ -53,6 +64,7 @@ app.use('/api/analysis', analysisRoutes);
 app.use('/api/report', reportRoutes);
 app.use('/api/roadmap', roadmapRoutes);
 app.use('/api/comparison', comparisonRoutes);
+app.use('/api/public', publicRoutes);
 
 // ─── Health Check ─────────────────────────────────────────────
 app.get('/health', (req, res) => {
