@@ -14,7 +14,7 @@ const RESOURCE_ICONS = {
 }
 
 const RESOURCE_COLORS = {
-  course: '#6366f1',
+  course: '#00E676',
   article: '#06b6d4',
   project: '#10b981',
   book: '#f59e0b',
@@ -47,7 +47,7 @@ export default function Roadmap() {
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-primary)' }}>
       <Sidebar />
-      <main style={{ marginLeft: 220, flex: 1, padding: '32px' }}>
+      <main style={{ marginLeft: 240, flex: 1, padding: '32px' }}>
 
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 32 }}>
           <div>
@@ -97,7 +97,7 @@ export default function Roadmap() {
               <div style={{ color: 'var(--text-muted)', fontSize: 20 }}>→</div>
               <div>
                 <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 4 }}>Target Role</p>
-                <p style={{ fontSize: 17, fontWeight: 700, color: '#818cf8' }}>{roadmap.targetRole}</p>
+                <p style={{ fontSize: 17, fontWeight: 700, color: '#69F0AE' }}>{roadmap.targetRole}</p>
               </div>
               <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
                 <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 4 }}>Estimated Timeline</p>
@@ -112,7 +112,7 @@ export default function Roadmap() {
                 {/* Timeline line */}
                 <div style={{
                   position: 'absolute', left: 19, top: 0, bottom: 0, width: 2,
-                  background: 'linear-gradient(to bottom, #6366f1, rgba(99,102,241,0.1))',
+                  background: 'linear-gradient(to bottom, #00E676, rgba(0,230,118,0.1))',
                 }} />
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
@@ -127,10 +127,10 @@ export default function Roadmap() {
                       <div style={{
                         position: 'absolute', left: 0, top: 12,
                         width: 40, height: 40, borderRadius: '50%',
-                        background: milestone.completed ? '#10b981' : 'rgba(99,102,241,0.15)',
-                        border: `2px solid ${milestone.completed ? '#10b981' : 'rgba(99,102,241,0.4)'}`,
+                        background: milestone.completed ? '#10b981' : 'rgba(0,230,118,0.15)',
+                        border: `2px solid ${milestone.completed ? '#10b981' : 'rgba(0,230,118,0.4)'}`,
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        color: milestone.completed ? 'white' : '#818cf8', fontWeight: 700, fontSize: 13,
+                        color: milestone.completed ? 'white' : '#69F0AE', fontWeight: 700, fontSize: 13,
                       }}>
                         {milestone.completed ? <CheckCircle2 size={18} /> : milestone.order}
                       </div>
@@ -169,9 +169,9 @@ export default function Roadmap() {
                                   style={{
                                     display: 'flex', alignItems: 'center', gap: 8,
                                     padding: '6px 10px', borderRadius: 6,
-                                    background: `${RESOURCE_COLORS[res.type] || '#6366f1'}10`,
-                                    border: `1px solid ${RESOURCE_COLORS[res.type] || '#6366f1'}25`,
-                                    color: RESOURCE_COLORS[res.type] || '#818cf8',
+                                    background: `${RESOURCE_COLORS[res.type] || '#00E676'}10`,
+                                    border: `1px solid ${RESOURCE_COLORS[res.type] || '#00E676'}25`,
+                                    color: RESOURCE_COLORS[res.type] || '#69F0AE',
                                     textDecoration: 'none', fontSize: 13, fontWeight: 500,
                                     transition: 'all 0.15s',
                                   }}

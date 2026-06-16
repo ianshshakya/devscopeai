@@ -49,7 +49,7 @@ const ScoreRing = ({ score }) => {
   return (
     <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
       <svg width={130} height={130} style={{ transform: 'rotate(-90deg)' }}>
-        <circle cx={65} cy={65} r={radius} fill="none" stroke="rgba(99,102,241,0.08)" strokeWidth={stroke} />
+        <circle cx={65} cy={65} r={radius} fill="none" stroke="rgba(0,230,118,0.08)" strokeWidth={stroke} />
         <motion.circle
           cx={65} cy={65} r={radius}
           fill="none" stroke={color} strokeWidth={stroke}
@@ -178,7 +178,7 @@ export default function PublicScanner() {
       {/* ── Ambient background glows ────────────────────────────── */}
       <div style={{
         position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0,
-        background: 'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(99,102,241,0.1) 0%, transparent 70%)',
+        background: 'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,230,118,0.1) 0%, transparent 70%)',
       }} />
 
       <main style={{ position: 'relative', zIndex: 1, maxWidth: 880, margin: '0 auto', padding: '100px 24px 80px' }}>
@@ -192,16 +192,16 @@ export default function PublicScanner() {
         >
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 16px',
-            background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.25)',
+            background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.25)',
             borderRadius: 20, marginBottom: 20,
           }}>
-            <Award size={14} style={{ color: '#818cf8' }} />
-            <span style={{ fontSize: 13, color: '#818cf8', fontWeight: 600 }}>Free • No Login Required</span>
+            <Award size={14} style={{ color: '#69F0AE' }} />
+            <span style={{ fontSize: 13, color: '#69F0AE', fontWeight: 600 }}>Free • No Login Required</span>
           </div>
 
           <h1 style={{
             fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 900, letterSpacing: '-0.02em', marginBottom: 14,
-            background: 'linear-gradient(135deg, #fff 0%, #cbd5e1 50%, #818cf8 100%)',
+            background: 'linear-gradient(135deg, #fff 0%, #cbd5e1 50%, #69F0AE 100%)',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
           }}>
             Scan Any GitHub Profile
@@ -256,9 +256,9 @@ export default function PublicScanner() {
                 whileTap={{ scale: 0.98 }}
                 style={{
                   padding: '14px 28px', borderRadius: 10, border: 'none', cursor: 'pointer',
-                  background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
-                  color: 'white', fontWeight: 700, fontSize: 15, display: 'flex', alignItems: 'center', gap: 8,
-                  boxShadow: '0 4px 20px rgba(99,102,241,0.3)',
+                  background: 'linear-gradient(135deg, #00E676 0%, #00C853 100%)',
+                  color: '#080B12', fontWeight: 700, fontSize: 15, display: 'flex', alignItems: 'center', gap: 8,
+                  boxShadow: '0 4px 20px rgba(0,230,118,0.3)',
                   transition: 'all 0.2s',
                 }}
               >
@@ -297,7 +297,7 @@ export default function PublicScanner() {
         {loading && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ padding: '20px 0' }}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, marginBottom: 40 }}>
-              <RefreshCw size={36} style={{ color: '#818cf8', animation: 'spin 1.5s linear infinite' }} />
+              <RefreshCw size={36} style={{ color: '#69F0AE', animation: 'spin 1.5s linear infinite' }} />
               <p style={{ color: 'var(--text-muted)', fontSize: 15 }}>Fetching public commits, repos, and bio...</p>
             </div>
             <ScannerSkeleton />
@@ -321,7 +321,7 @@ export default function PublicScanner() {
                   <img
                     src={profile?.avatarUrl}
                     alt={profile?.name || username}
-                    style={{ width: 80, height: 80, borderRadius: '50%', border: '2px solid rgba(99,102,241,0.3)' }}
+                    style={{ width: 80, height: 80, borderRadius: '50%', border: '2px solid rgba(0,230,118,0.3)' }}
                   />
                   <div style={{ flex: 1 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 6 }}>
@@ -365,7 +365,7 @@ export default function PublicScanner() {
               {/* Metrics Grid */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14 }}>
                 {[
-                  { label: 'Total Repos', value: metrics?.totalRepos || 0, icon: <GitBranch size={16} />, color: '#818cf8' },
+                  { label: 'Total Repos', value: metrics?.totalRepos || 0, icon: <GitBranch size={16} />, color: '#69F0AE' },
                   { label: 'Total Stars', value: metrics?.totalStars || 0, icon: <Star size={16} />, color: '#f59e0b' },
                   { label: 'Recent Active Repos', value: metrics?.activeRecentRepos || 0, icon: <Activity size={16} />, color: '#10b981' },
                   { label: 'Top Language', value: metrics?.languages ? Object.keys(metrics.languages)[0] || 'N/A' : 'N/A', icon: <Code size={16} />, color: '#ec4899' },
@@ -435,7 +435,7 @@ export default function PublicScanner() {
                       <div key={idx} className="glass-card-hover" style={{ padding: 20, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                         <div>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-                            <GitBranch size={15} style={{ color: '#818cf8' }} />
+                            <GitBranch size={15} style={{ color: '#69F0AE' }} />
                             <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
                               {repo.name}
                             </h4>
@@ -480,13 +480,13 @@ export default function PublicScanner() {
                   onClick={handleShare}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 8, padding: '12px 24px',
-                    borderRadius: 12, border: '1px solid rgba(99,102,241,0.4)',
-                    background: 'rgba(99,102,241,0.08)', color: '#818cf8',
+                    borderRadius: 12, border: '1px solid rgba(0,230,118,0.4)',
+                    background: 'rgba(0,230,118,0.08)', color: '#69F0AE',
                     cursor: 'pointer', fontWeight: 600, fontSize: 14,
                     transition: 'all 0.2s',
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(99,102,241,0.15)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
-                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(99,102,241,0.08)'; e.currentTarget.style.transform = 'translateY(0)' }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,230,118,0.15)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(0,230,118,0.08)'; e.currentTarget.style.transform = 'translateY(0)' }}
                 >
                   <Share2 size={15} /> Copy Shareable Link
                 </button>

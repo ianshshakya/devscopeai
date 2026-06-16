@@ -18,6 +18,16 @@ const CATEGORIES = [
   { key: 'security', label: 'Security', icon: <Shield size={16} /> },
 ]
 
+// ── Loading Steps ──────────────────────────────────────────────
+const ANALYSIS_STEPS = [
+  'Fetching repository structure',
+  'Parsing project architecture',
+  'Evaluating code patterns',
+  'Checking testing practices',
+  'Reviewing security posture',
+  'Generating engineer feedback',
+]
+
 // ── Category Score Card ────────────────────────────────────────
 const CategoryCard = ({ category, scores, aiReview }) => {
   const [open, setOpen] = useState(false)
@@ -34,31 +44,31 @@ const CategoryCard = ({ category, scores, aiReview }) => {
         onClick={() => setOpen(!open)}
         style={{
           width: '100%', background: 'none', border: 'none', cursor: 'pointer',
-          padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 14, textAlign: 'left',
+          padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 14, textAlign: 'left',
         }}
       >
         <div style={{
           width: 36, height: 36, borderRadius: 8, flexShrink: 0,
-          background: `${color}18`, border: `1px solid ${color}30`,
+          background: `${color}10`, border: `1px solid ${color}20`,
           display: 'flex', alignItems: 'center', justifyContent: 'center', color,
         }}>
           {category.icon}
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-            <span style={{ fontWeight: 600, fontSize: 14, color: 'var(--text-primary)' }}>{category.label}</span>
+            <span style={{ fontWeight: 600, fontSize: 13, color: 'var(--text-primary)' }}>{category.label}</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-              <span style={{ fontSize: 18, fontWeight: 800, color }}>{score}</span>
-              <span style={{ color: 'var(--text-muted)', fontSize: 14 }}>/100</span>
+              <span className="metric-value" style={{ fontSize: 17, color }}>{score}</span>
+              <span style={{ color: 'var(--text-muted)', fontSize: 13 }}>/100</span>
               {open ? <ChevronUp size={14} color="var(--text-muted)" /> : <ChevronDown size={14} color="var(--text-muted)" />}
             </div>
           </div>
-          <div style={{ height: 4, background: 'rgba(99,102,241,0.1)', borderRadius: 2, marginTop: 8, overflow: 'hidden' }}>
+          <div style={{ height: 3, background: 'rgba(255,255,255,0.04)', borderRadius: 2, marginTop: 8, overflow: 'hidden' }}>
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${score}%` }}
               transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}
-              style={{ height: '100%', background: color, borderRadius: 2 }}
+              style={{ height: '100%', background: color, borderRadius: 2, boxShadow: `0 0 8px ${color}40` }}
             />
           </div>
         </div>
@@ -73,21 +83,21 @@ const CategoryCard = ({ category, scores, aiReview }) => {
             transition={{ duration: 0.25 }}
             style={{ overflow: 'hidden' }}
           >
-            <div style={{ padding: '0 20px 20px', borderTop: '1px solid var(--border)' }}>
+            <div style={{ padding: '0 18px 18px', borderTop: '1px solid var(--border)' }}>
               {explanation ? (
                 <>
-                  <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: 12, marginTop: 12 }}>
+                  <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: 12, marginTop: 12 }}>
                     {explanation.explanation}
                   </p>
                   {explanation.suggestions?.length > 0 && (
                     <div>
-                      <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                      <p style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                         Suggestions
                       </p>
                       <ul style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                         {explanation.suggestions.map((s, i) => (
                           <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: 'var(--text-secondary)' }}>
-                            <ChevronDown size={14} style={{ color: '#6366f1', marginTop: 2, flexShrink: 0, transform: 'rotate(-90deg)' }} />
+                            <span style={{ color: '#00E676', marginTop: 1, flexShrink: 0 }}>→</span>
                             {s}
                           </li>
                         ))}
@@ -96,7 +106,7 @@ const CategoryCard = ({ category, scores, aiReview }) => {
                   )}
                 </>
               ) : (
-                <p style={{ fontSize: 14, color: 'var(--text-muted)', marginTop: 12 }}>
+                <p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 12 }}>
                   No detailed explanation available. Score based on repository metrics.
                 </p>
               )}
@@ -118,6 +128,68 @@ const StatusBadge = ({ status }) => {
   }
   const s = map[status] || map.pending
   return <span className={`badge ${s.class}`}>{s.icon} {s.label}</span>
+}
+
+// ── Analysis Loading Experience ────────────────────────────────
+const AnalysisLoader = ({ status }) => {
+  const [currentStep, setCurrentStep] = useState(0)
+
+  useState(() => {
+    const interval = setInterval(() => {
+      setCurrentStep(prev => (prev < ANALYSIS_STEPS.length - 1 ? prev + 1 : prev))
+    }, 3000)
+    return () => clearInterval(interval)
+  })
+
+  return (
+    <motion.div
+      className="card-premium"
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+      style={{ padding: 40, marginBottom: 24 }}
+    >
+      <div style={{ textAlign: 'center', marginBottom: 32 }}>
+        <div style={{
+          width: 48, height: 48, margin: '0 auto 16px',
+          border: '3px solid rgba(0,230,118,0.15)',
+          borderTopColor: '#00E676', borderRadius: '50%',
+          animation: 'spin 0.8s linear infinite',
+        }} />
+        <p style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>Analyzing Repository</p>
+        <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>
+          AI is reviewing your code. This takes 30–90 seconds.
+        </p>
+      </div>
+
+      <div style={{ maxWidth: 340, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {ANALYSIS_STEPS.map((step, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: i * 0.15 }}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 10,
+              fontSize: 13, padding: '6px 0',
+              color: i <= currentStep ? 'var(--text-primary)' : 'var(--text-muted)',
+            }}
+          >
+            {i < currentStep ? (
+              <CheckCircle2 size={14} style={{ color: '#00E676', flexShrink: 0 }} />
+            ) : i === currentStep ? (
+              <div style={{
+                width: 14, height: 14, borderRadius: '50%',
+                border: '2px solid #00E676', borderTopColor: 'transparent',
+                animation: 'spin 0.8s linear infinite', flexShrink: 0,
+              }} />
+            ) : (
+              <div style={{ width: 14, height: 14, borderRadius: '50%', border: '1px solid var(--border-strong)', flexShrink: 0 }} />
+            )}
+            <span style={{ fontWeight: i === currentStep ? 600 : 400 }}>{step}</span>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  )
 }
 
 export default function AnalysisPage() {
@@ -165,18 +237,18 @@ export default function AnalysisPage() {
     return (
       <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-primary)' }}>
         <Sidebar />
-        <main style={{ marginLeft: 220, flex: 1, padding: '32px' }}>
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: 32 }}>
-            <h1 style={{ fontSize: 26, fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 6 }}>
+        <main style={{ marginLeft: 240, flex: 1, padding: '28px 32px' }}>
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: 28 }}>
+            <h1 style={{ fontSize: 24, fontWeight: 800, letterSpacing: '-0.03em', marginBottom: 4 }}>
               Analyze a Repository
             </h1>
-            <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>
               Select a GitHub repository to get your AI-powered engineering review.
             </p>
           </motion.div>
 
           {/* Search */}
-          <div style={{ position: 'relative', marginBottom: 20 }}>
+          <div style={{ position: 'relative', marginBottom: 16 }}>
             <FileCode2 size={15} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
             <input
               type="text"
@@ -189,28 +261,28 @@ export default function AnalysisPage() {
           </div>
 
           {reposLoading ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="shimmer" style={{ height: 72, borderRadius: 10 }} />
+                <div key={i} className="shimmer" style={{ height: 68, borderRadius: 10 }} />
               ))}
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {filteredRepos.map((repo) => (
                 <motion.div
                   key={repo.id}
                   className="glass-card-hover"
                   initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
                   style={{
-                    padding: '14px 18px', cursor: 'pointer',
-                    border: selectedRepo?.id === repo.id ? '1px solid rgba(99,102,241,0.5)' : '1px solid var(--border)',
-                    background: selectedRepo?.id === repo.id ? 'rgba(99,102,241,0.06)' : 'rgba(15,23,36,0.7)',
+                    padding: '12px 16px', cursor: 'pointer',
+                    border: selectedRepo?.id === repo.id ? '1px solid rgba(0,230,118,0.4)' : '1px solid var(--border)',
+                    background: selectedRepo?.id === repo.id ? 'rgba(0,230,118,0.04)' : 'var(--bg-card)',
                   }}
                   onClick={() => setSelectedRepo(repo)}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <GitBranch size={16} style={{ color: '#818cf8', flexShrink: 0 }} />
+                      <GitBranch size={16} style={{ color: '#00E676', flexShrink: 0 }} />
                       <div>
                         <p style={{ fontWeight: 600, fontSize: 14, color: 'var(--text-primary)' }}>{repo.name}</p>
                         {repo.description && (
@@ -241,25 +313,25 @@ export default function AnalysisPage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
               style={{
-                position: 'fixed', bottom: 32, right: 32, left: 252,
-                background: 'rgba(13,17,23,0.95)', backdropFilter: 'blur(16px)',
-                border: '1px solid rgba(99,102,241,0.35)', borderRadius: 14,
-                padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+                position: 'fixed', bottom: 24, right: 32, left: 272,
+                background: 'rgba(8,11,18,0.95)', backdropFilter: 'blur(20px)',
+                border: '1px solid rgba(0,230,118,0.25)', borderRadius: 12,
+                padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                boxShadow: '0 8px 32px rgba(0,0,0,0.4), 0 0 20px rgba(0,230,118,0.08)',
               }}
             >
               <div>
-                <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>Selected repository</p>
-                <p style={{ fontWeight: 700, fontSize: 16 }}>{selectedRepo.fullName}</p>
+                <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>Selected repository</p>
+                <p style={{ fontWeight: 700, fontSize: 15 }}>{selectedRepo.fullName}</p>
               </div>
               <button
                 className="btn-primary"
                 onClick={() => startMutation.mutate(selectedRepo.fullName)}
                 disabled={startMutation.isPending}
-                style={{ padding: '12px 24px', fontSize: 15 }}
+                style={{ padding: '10px 20px', fontSize: 14 }}
               >
                 {startMutation.isPending ? (
-                  <><span style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: 'white', borderRadius: '50%', animation: 'spin 0.7s linear infinite', display: 'inline-block' }} /> Analyzing...</>
+                  <><span style={{ width: 16, height: 16, border: '2px solid rgba(8,11,18,0.3)', borderTopColor: '#080B12', borderRadius: '50%', animation: 'spin 0.7s linear infinite', display: 'inline-block' }} /> Analyzing...</>
                 ) : (
                   <><Zap size={16} /> Analyze Now</>
                 )}
@@ -276,9 +348,9 @@ export default function AnalysisPage() {
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-primary)' }}>
       <Sidebar />
-      <main style={{ marginLeft: 220, flex: 1, padding: '32px' }}>
+      <main style={{ marginLeft: 240, flex: 1, padding: '28px 32px' }}>
         {analysisLoading ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div className="shimmer" style={{ height: 32, width: 300, borderRadius: 8 }} />
             <div className="shimmer" style={{ height: 120, borderRadius: 12 }} />
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
@@ -293,17 +365,17 @@ export default function AnalysisPage() {
         ) : (
           <>
             {/* Header */}
-            <div style={{ marginBottom: 28 }}>
+            <div style={{ marginBottom: 24 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
                 <div style={{
                   width: 40, height: 40, borderRadius: 10,
-                  background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.25)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#818cf8',
+                  background: 'rgba(0,230,118,0.06)', border: '1px solid rgba(0,230,118,0.15)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#00E676',
                 }}>
                   <GitBranch size={20} />
                 </div>
                 <div>
-                  <h1 style={{ fontSize: 22, fontWeight: 800, letterSpacing: '-0.02em' }}>{analysis.repoId}</h1>
+                  <h1 style={{ fontSize: 22, fontWeight: 800, letterSpacing: '-0.03em' }}>{analysis.repoId}</h1>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
                     <StatusBadge status={analysis.status} />
                     {analysis.language && <span className="badge badge-blue" style={{ fontSize: 11 }}>{analysis.language}</span>}
@@ -332,62 +404,48 @@ export default function AnalysisPage() {
 
             {/* Analyzing progress */}
             {(analysis.status === 'analyzing' || analysis.status === 'pending') && (
-              <motion.div
-                className="glass-card"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                style={{ padding: 40, textAlign: 'center', marginBottom: 24 }}
-              >
-                <div style={{
-                  width: 56, height: 56, border: '4px solid rgba(99,102,241,0.2)',
-                  borderTopColor: '#6366f1', borderRadius: '50%',
-                  animation: 'spin 0.8s linear infinite', margin: '0 auto 20px',
-                }} />
-                <p style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Analyzing Repository...</p>
-                <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>
-                  AI is reviewing your code structure, patterns, and engineering practices. This takes 30–90 seconds.
-                </p>
-              </motion.div>
+              <AnalysisLoader status={analysis.status} />
             )}
 
             {analysis.status === 'failed' && (
-              <div className="glass-card" style={{ padding: 28, textAlign: 'center', borderColor: 'rgba(239,68,68,0.3)', marginBottom: 24 }}>
+              <div className="glass-card" style={{ padding: 28, textAlign: 'center', borderColor: 'rgba(239,68,68,0.2)', marginBottom: 24 }}>
                 <XCircle size={32} style={{ color: '#ef4444', margin: '0 auto 12px' }} />
                 <p style={{ fontSize: 16, fontWeight: 600, marginBottom: 8 }}>Analysis Failed</p>
-                <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>{analysis.errorMessage || 'An unexpected error occurred.'}</p>
+                <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>{analysis.errorMessage || 'An unexpected error occurred.'}</p>
               </div>
             )}
 
             {analysis.status === 'completed' && (
               <>
                 {/* Overall score + readiness */}
-                <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', gap: 20, marginBottom: 24 }}>
-                  <div className="glass-card" style={{ padding: 24, textAlign: 'center' }}>
-                    <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 12 }}>Overall Score</p>
-                    <div style={{ fontSize: 52, fontWeight: 900, color: getScoreColor(analysis.scores.overall), lineHeight: 1 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', gap: 16, marginBottom: 20 }}>
+                  <div className="card-premium" style={{ padding: 24, textAlign: 'center' }}>
+                    <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Overall Score</p>
+                    <div className="metric-value" style={{ fontSize: 48, color: getScoreColor(analysis.scores.overall), lineHeight: 1 }}>
                       {analysis.scores.overall}
                     </div>
-                    <p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 4 }}>/100</p>
+                    <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4 }}>/100</p>
                     <p style={{ marginTop: 8, fontSize: 14, fontWeight: 700, color: getScoreColor(analysis.scores.overall) }}>
                       {getScoreLabel(analysis.scores.overall)}
                     </p>
                   </div>
 
-                  <div className="glass-card" style={{ padding: 24 }}>
+                  <div className="glass-card" style={{ padding: 22 }}>
                     {/* Strengths & Weaknesses */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
                       <div>
-                        <p style={{ fontSize: 12, fontWeight: 600, color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>
+                        <p style={{ fontSize: 11, fontWeight: 600, color: '#00E676', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>
                           ✓ Strengths
                         </p>
                         {(analysis.aiReview?.strengths || []).slice(0, 4).map((s, i) => (
                           <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 6, marginBottom: 7 }}>
-                            <CheckCircle2 size={13} style={{ color: '#10b981', marginTop: 2, flexShrink: 0 }} />
+                            <CheckCircle2 size={13} style={{ color: '#00E676', marginTop: 2, flexShrink: 0 }} />
                             <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.5 }}>{s}</p>
                           </div>
                         ))}
                       </div>
                       <div>
-                        <p style={{ fontSize: 12, fontWeight: 600, color: '#ef4444', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>
+                        <p style={{ fontSize: 11, fontWeight: 600, color: '#ef4444', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>
                           ✗ Weaknesses
                         </p>
                         {(analysis.aiReview?.weaknesses || []).slice(0, 4).map((w, i) => (
@@ -402,9 +460,9 @@ export default function AnalysisPage() {
                 </div>
 
                 {/* Category breakdown */}
-                <div style={{ marginBottom: 24 }}>
-                  <h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 14 }}>Category Breakdown</h2>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <div style={{ marginBottom: 20 }}>
+                  <h2 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12, color: 'var(--text-secondary)' }}>Category Breakdown</h2>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                     {CATEGORIES.map((cat) => (
                       <CategoryCard
                         key={cat.key}
@@ -417,21 +475,21 @@ export default function AnalysisPage() {
                 </div>
 
                 {/* Missing skills & suggested projects */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-                  <div className="glass-card" style={{ padding: 22 }}>
-                    <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 14, color: '#f59e0b' }}>⚠ Missing Skills</h3>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                  <div className="glass-card" style={{ padding: 20 }}>
+                    <h3 style={{ fontSize: 13, fontWeight: 700, marginBottom: 12, color: '#f59e0b' }}>⚠ Missing Skills</h3>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                       {(analysis.aiReview?.missingSkills || []).map((skill, i) => (
                         <span key={i} className="badge badge-yellow">{skill}</span>
                       ))}
                     </div>
                   </div>
-                  <div className="glass-card" style={{ padding: 22 }}>
-                    <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 14, color: '#818cf8' }}>💡 Suggested Projects</h3>
-                    <ul style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  <div className="glass-card" style={{ padding: 20 }}>
+                    <h3 style={{ fontSize: 13, fontWeight: 700, marginBottom: 12, color: '#3B82F6' }}>💡 Suggested Projects</h3>
+                    <ul style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                       {(analysis.aiReview?.suggestedProjects || []).map((p, i) => (
                         <li key={i} style={{ fontSize: 13, color: 'var(--text-secondary)', display: 'flex', gap: 6 }}>
-                          <span style={{ color: '#818cf8' }}>→</span> {p}
+                          <span style={{ color: '#00E676' }}>→</span> {p}
                         </li>
                       ))}
                     </ul>

@@ -1,318 +1,1344 @@
-import { useQuery } from '@tanstack/react-query'
-import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
-import { GitBranch, TrendingUp, Shield, TestTube, Code2, Award, ArrowRight, Plus, Clock } from 'lucide-react'
-import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts'
-import Sidebar from '../components/layout/Sidebar'
-import { api } from '../lib/api'
-import { getScoreColor, getScoreLabel, timeAgo } from '../lib/utils'
-import { useAuth } from '../lib/authContext'
+import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
-// ── Animated score number ──────────────────────────────────────
-const AnimatedScore = ({ score, size = 'lg' }) => {
-  const color = getScoreColor(score)
-  const radius = size === 'lg' ? 40 : 28
-  const stroke = size === 'lg' ? 4 : 3
-  const circumference = 2 * Math.PI * radius
-  const dash = (score / 100) * circumference
+import {
+  GitBranch,
+  ArrowRight,
+  Plus,
+  Clock,
+  Sparkles,
+  TrendingUp,
+  Target,
+  Shield,
+  TestTube,
+  Code2,
+  Rocket,
+} from "lucide-react";
 
-  return (
-    <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-      <svg width={size === 'lg' ? 100 : 70} height={size === 'lg' ? 100 : 70} style={{ transform: 'rotate(-90deg)' }}>
-        <circle cx={size === 'lg' ? 50 : 35} cy={size === 'lg' ? 50 : 35} r={radius} fill="none" stroke="rgba(99,102,241,0.1)" strokeWidth={stroke} />
-        <motion.circle
-          cx={size === 'lg' ? 50 : 35} cy={size === 'lg' ? 50 : 35} r={radius}
-          fill="none" stroke={color} strokeWidth={stroke}
-          strokeDasharray={circumference}
-          initial={{ strokeDashoffset: circumference }}
-          animate={{ strokeDashoffset: circumference - dash }}
-          transition={{ duration: 1.2, ease: 'easeOut', delay: 0.3 }}
-          strokeLinecap="round"
-        />
-      </svg>
-      <div style={{ position: 'absolute', textAlign: 'center' }}>
-        <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          style={{ fontSize: size === 'lg' ? 24 : 16, fontWeight: 800, color, lineHeight: 1 }}
-        >
-          {score}
-        </motion.div>
-        {size === 'lg' && <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 2 }}>/100</div>}
-      </div>
-    </div>
-  )
-}
+import {
+  RadarChart,
+  Radar,
+  PolarGrid,
+  PolarAngleAxis,
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+} from "recharts";
 
-// ── Score Card ─────────────────────────────────────────────────
-const ScoreCard = ({ title, score, icon, delay = 0 }) => (
+import Sidebar from "../components/layout/Sidebar";
+import { api } from "../lib/api";
+import {
+  getScoreColor,
+  getScoreLabel,
+  timeAgo,
+} from "../lib/utils";
+
+import { useAuth } from "../lib/authContext";
+
+
+/* ==============================================
+   Animation Variants
+============================================== */
+
+const fadeUp = {
+  hidden: {
+    opacity: 0,
+    y: 25,
+  },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.45,
+      ease: "easeOut",
+    },
+  },
+};
+
+
+/* ==============================================
+   Premium Glass Card
+============================================== */
+
+/* ==============================================
+   Premium Glass Card
+============================================== */
+
+const GlassCard = ({
+  children,
+  className = "",
+  style = {},
+  delay = 0,
+}) => (
   <motion.div
-    className="glass-card-hover"
-    initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.4, delay }}
-    style={{ padding: 20, display: 'flex', alignItems: 'center', gap: 16 }}
+    variants={fadeUp}
+    initial="hidden"
+    animate="show"
+    transition={{
+      delay,
+    }}
+    className={`cyber-card cyber-card-hover scanline-container grid-pattern ${className}`}
+    style={{
+      padding: "22px",
+      ...style,
+    }}
   >
-    <AnimatedScore score={score} size="sm" />
-    <div>
-      <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 2 }}>{title}</p>
-      <p style={{ fontSize: 15, fontWeight: 700, color: getScoreColor(score) }}>{getScoreLabel(score)}</p>
+    {/* Cybernetic Corner Highlights */}
+    <div className="cyber-corner cyber-corner-tl" />
+    <div className="cyber-corner cyber-corner-tr" />
+    <div className="cyber-corner cyber-corner-bl" />
+    <div className="cyber-corner cyber-corner-br" />
+
+    {/* Content Area */}
+    <div style={{ position: "relative", zIndex: 2 }}>
+      {children}
     </div>
   </motion.div>
-)
+);
 
-// ── Custom Radar Tooltip ───────────────────────────────────────
-const RadarTooltip = ({ active, payload }) => {
-  if (!active || !payload?.length) return null
+
+/* ==============================================
+   Animated Engineering Score Ring
+============================================== */
+
+const ScoreRing = ({
+  score,
+  size = 150,
+}) => {
+  const radius = 54;
+  const stroke = 8;
+  const circumference = 2 * Math.PI * radius;
+  const progress = circumference - (score / 100) * circumference;
+
   return (
-    <div className="glass-card" style={{ padding: '8px 12px', fontSize: 13 }}>
-      <p style={{ color: 'var(--text-secondary)', marginBottom: 2 }}>{payload[0].payload.dimension}</p>
-      <p style={{ fontWeight: 700, color: getScoreColor(payload[0].value) }}>{payload[0].value}/100</p>
-    </div>
-  )
-}
+    <div
+      style={{
+        position: "relative",
+        width: size,
+        height: size,
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <svg
+        width={size}
+        height={size}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+        }}
+      >
+        {/* Outer Rotating Cyber Grid Ring */}
+        <motion.circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius + 12}
+          fill="none"
+          stroke="rgba(0, 230, 118, 0.15)"
+          strokeWidth={1}
+          strokeDasharray="4 6"
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
+          style={{ transformOrigin: "center" }}
+        />
 
-// ── Loading Skeleton ───────────────────────────────────────────
-const Skeleton = ({ h = 20, w = '100%', style = {} }) => (
-  <div className="shimmer" style={{ height: h, width: w, ...style }} />
-)
+        {/* Outer Static Tick Ring */}
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius + 8}
+          fill="none"
+          stroke="rgba(255,255,255,0.03)"
+          strokeWidth={1.5}
+          strokeDasharray="2 12"
+        />
+
+        {/* Base Track */}
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="rgba(255,255,255,0.05)"
+          strokeWidth={stroke}
+        />
+
+        {/* Glowing Progress Arc */}
+        <motion.circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke={getScoreColor(score)}
+          strokeWidth={stroke}
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          transform={`rotate(-90 ${size / 2} ${size / 2})`}
+          initial={{
+            strokeDashoffset: circumference,
+          }}
+          animate={{
+            strokeDashoffset: progress,
+          }}
+          transition={{
+            duration: 1.5,
+            ease: "easeOut",
+          }}
+          style={{
+            filter: `drop-shadow(0 0 10px ${getScoreColor(score)}80)`,
+          }}
+        />
+      </svg>
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 2,
+        }}
+      >
+        <div
+          className="metric-value cyber-mono"
+          style={{
+            fontSize: 34,
+            fontWeight: 800,
+            color: getScoreColor(score),
+            letterSpacing: "-0.03em",
+            textShadow: `0 0 16px ${getScoreColor(score)}40`,
+          }}
+        >
+          {score}
+        </div>
+
+        <div
+          style={{
+            fontSize: 10,
+            textTransform: "uppercase",
+            letterSpacing: "0.1em",
+            color: "var(--text-secondary)",
+            marginTop: -2,
+            fontWeight: 700,
+          }}
+        >
+          readiness
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+/* ==============================================
+   Engineering Pillar
+============================================== */
+
+const SkillPillar = ({
+  title,
+  score,
+  icon,
+}) => (
+  <div
+    style={{
+      marginBottom: 16,
+    }}
+  >
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 6,
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          gap: 8,
+          alignItems: "center",
+          color: "var(--text-secondary)",
+          fontSize: 13,
+          fontWeight: 500,
+        }}
+      >
+        <span style={{ opacity: 0.7, display: "inline-flex", color: getScoreColor(score) }}>{icon}</span>
+        <span>{title}</span>
+      </div>
+
+      <span
+        className="cyber-mono"
+        style={{
+          fontSize: 13,
+          color: getScoreColor(score),
+          textShadow: `0 0 8px ${getScoreColor(score)}30`,
+        }}
+      >
+        {score}%
+      </span>
+    </div>
+
+    <div
+      style={{
+        height: 6,
+        borderRadius: 999,
+        background: "rgba(255,255,255,0.03)",
+        border: "1px solid rgba(255,255,255,0.05)",
+        position: "relative",
+      }}
+    >
+      <motion.div
+        initial={{
+          width: 0,
+        }}
+        animate={{
+          width: `${score}%`,
+        }}
+        transition={{
+          duration: 1.0,
+          ease: "easeOut",
+        }}
+        style={{
+          height: "100%",
+          borderRadius: 999,
+          background: `linear-gradient(90deg, ${getScoreColor(score)}40, ${getScoreColor(score)})`,
+          boxShadow: `0 0 10px ${getScoreColor(score)}60`,
+          position: "relative",
+        }}
+      />
+    </div>
+  </div>
+);
+
+
+/* ==============================================
+   AI Engineer Insight Card
+============================================== */
+
+const Insight = ({
+  text,
+  type = "success",
+}) => {
+  const colors = {
+    success: "#00E676",
+    warning: "#F59E0B",
+    info: "#3B82F6",
+  };
+
+  const glows = {
+    success: "rgba(0, 230, 118, 0.04)",
+    warning: "rgba(245, 158, 11, 0.04)",
+    info: "rgba(59, 130, 246, 0.04)",
+  };
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        gap: 12,
+        padding: "10px 14px",
+        borderRadius: 8,
+        background: "rgba(255, 255, 255, 0.01)",
+        borderLeft: `3px solid ${colors[type]}`,
+        marginBottom: 8,
+        transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
+        boxShadow: `inset 2px 0 10px ${glows[type]}`,
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.background = "rgba(255, 255, 255, 0.03)";
+        e.currentTarget.style.transform = "translateX(4px)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.background = "rgba(255, 255, 255, 0.01)";
+        e.currentTarget.style.transform = "translateX(0)";
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <Sparkles
+          size={14}
+          color={colors[type]}
+          style={{ filter: `drop-shadow(0 0 6px ${colors[type]})` }}
+        />
+      </div>
+      <p
+        style={{
+          fontSize: 13,
+          color: "var(--text-secondary)",
+          lineHeight: 1.5,
+        }}
+      >
+        {text}
+      </p>
+    </div>
+  );
+};
+
+/* ==============================================
+   Dashboard Component
+============================================== */
 
 export default function Dashboard() {
-  const { user } = useAuth()
+  const { user } = useAuth();
 
-  const { data: stats, isLoading } = useQuery({
-    queryKey: ['user-stats'],
-    queryFn: () => api.get('/api/user/stats').then(r => r.data),
-    staleTime: 2 * 60 * 1000,
-  })
 
-  const radarData = stats ? [
-    { dimension: 'Code Quality', score: stats.avgScores?.codeQuality || 0 },
-    { dimension: 'Architecture', score: stats.avgScores?.architecture || 0 },
-    { dimension: 'Testing', score: stats.avgScores?.testing || 0 },
-    { dimension: 'Security', score: stats.avgScores?.security || 0 },
-    { dimension: 'Docs', score: stats.avgScores?.documentation || 0 },
-    { dimension: 'Frontend', score: stats.avgScores?.frontend || 0 },
-    { dimension: 'Backend', score: stats.avgScores?.backend || 0 },
-  ] : []
+  /* ==========================================
+     Fetch Dashboard Data
+  ========================================== */
 
-  const timelineData = stats?.scoreHistory?.slice(-10).reverse().map((h, i) => ({
-    name: h.repoName?.slice(0, 12) || `Repo ${i+1}`,
-    score: h.score,
-  })) || []
+  const {
+    data: stats,
+    isLoading,
+  } = useQuery({
+    queryKey: ["user-stats"],
+    queryFn: () =>
+      api
+        .get("/api/user/stats")
+        .then((res) => res.data),
 
-  const overallScore = stats?.avgScores?.overall || 0
+    staleTime: 1000 * 60 * 2,
+  });
+
+
+  /* ==========================================
+     Prepare Chart Data
+  ========================================== */
+
+  const radarData = stats
+    ? [
+        {
+          dimension: "Code",
+          score: stats.avgScores?.codeQuality || 0,
+        },
+        {
+          dimension: "Architecture",
+          score: stats.avgScores?.architecture || 0,
+        },
+        {
+          dimension: "Testing",
+          score: stats.avgScores?.testing || 0,
+        },
+        {
+          dimension: "Security",
+          score: stats.avgScores?.security || 0,
+        },
+        {
+          dimension: "Docs",
+          score: stats.avgScores?.documentation || 0,
+        },
+      ]
+    : [];
+
+
+  const timelineData =
+    stats?.scoreHistory
+      ?.slice(-6)
+      .reverse()
+      .map((item, index) => ({
+        name:
+          item.repoName?.slice(0, 10) ||
+          `Repo ${index + 1}`,
+        score: item.score,
+      })) || [];
+
+
+  const overallScore =
+    stats?.avgScores?.overall || 0;
+
+
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-primary)' }}>
+    <div
+      style={{
+        display: "flex",
+        minHeight: "100vh",
+        background: `
+          radial-gradient(
+            circle at top right,
+            rgba(0, 230, 118, 0.1),
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at bottom left,
+            rgba(59, 130, 246, 0.07),
+            transparent 40%
+          ),
+          #060813
+        `,
+      }}
+    >
       <Sidebar />
-      <main style={{ marginLeft: 220, flex: 1, padding: '32px 32px', minWidth: 0 }}>
 
-        {/* Header */}
+      <main
+        style={{
+          flex: 1,
+          marginLeft: 240,
+          padding: "32px 40px",
+          minWidth: 0,
+        }}
+      >
+        {/* ===============================
+            Hero Header
+        ================================ */}
         <motion.div
-          initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
-          style={{ marginBottom: 32 }}
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
+          style={{
+            marginBottom: 32,
+            borderBottom: "1px dashed rgba(255, 255, 255, 0.08)",
+            paddingBottom: 20,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+            flexWrap: "wrap",
+            gap: 16,
+          }}
         >
-          <p style={{ color: 'var(--text-muted)', fontSize: 14, marginBottom: 6 }}>
-            Welcome back,
-          </p>
-          <h1 style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.02em' }}>
-            {user?.displayName || user?.username} 👋
-          </h1>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+              <span className="badge badge-green animate-pulse-glow" style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', padding: '3px 8px' }}>
+                <span className="status-dot status-dot-green" style={{ marginRight: 6, display: 'inline-block' }} />
+                DevScope Engine v2.4
+              </span>
+              <span className="cyber-mono" style={{ fontSize: 10, color: 'var(--text-muted)' }}>SYSTEM_STATE // SECURE_ACTIVE</span>
+            </div>
+
+            <h1
+              className="gradient-text"
+              style={{
+                fontSize: 42,
+                fontWeight: 800,
+                letterSpacing: "-0.04em",
+                lineHeight: 1.1,
+              }}
+            >
+              {user?.displayName || user?.username}
+            </h1>
+
+            <p
+              style={{
+                color: "var(--text-secondary)",
+                marginTop: 8,
+                maxWidth: 620,
+                fontSize: 14,
+                lineHeight: 1.6,
+              }}
+            >
+              Your AI Engineer has reviewed your development journey and generated insights to help you become a stronger software engineer.
+            </p>
+          </div>
+
+          <div
+            className="cyber-mono"
+            style={{
+              padding: "10px 18px",
+              background: "rgba(255, 255, 255, 0.01)",
+              border: "1px solid rgba(255, 255, 255, 0.04)",
+              borderRadius: 12,
+              fontSize: 11,
+              color: "var(--text-muted)",
+              display: "flex",
+              flexDirection: "column",
+              gap: 4,
+              textAlign: "right",
+            }}
+          >
+            <div>UTC_TIME: <span style={{ color: "var(--accent)" }}>{new Date().toISOString().slice(11, 19)}</span></div>
+            <div>STATUS: <span style={{ color: "#3B82F6" }}>ONLINE</span></div>
+          </div>
         </motion.div>
 
-        {/* ── Overall Score + Quick Actions ─────────────────── */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 20, marginBottom: 24, alignItems: 'stretch' }}>
-          {/* Overall Score */}
-          <motion.div
-            className="glass-card"
-            initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            style={{ padding: 28, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}
-          >
-            <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 16 }}>Overall Readiness Score</p>
-            {isLoading ? (
-              <Skeleton h={100} w={100} style={{ borderRadius: '50%', margin: '0 auto' }} />
-            ) : (
-              <AnimatedScore score={overallScore} size="lg" />
-            )}
-            <p style={{ marginTop: 12, fontSize: 15, fontWeight: 700, color: getScoreColor(overallScore) }}>
-              {getScoreLabel(overallScore)}
-            </p>
-            <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4 }}>
-              Based on {stats?.analysisCount || 0} repositor{stats?.analysisCount === 1 ? 'y' : 'ies'}
-            </p>
-          </motion.div>
-
-          {/* Quick Score Cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-            {isLoading ? (
-              [...Array(4)].map((_, i) => (
-                <div key={i} className="glass-card" style={{ padding: 20 }}>
-                  <Skeleton h={70} style={{ borderRadius: 8 }} />
+        {/* ===============================
+            Command Center
+        ================================ */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1.4fr 1fr",
+            gap: 20,
+            marginBottom: 24,
+          }}
+        >
+          {/* Engineering Score Card */}
+          <GlassCard>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+                gap: 20,
+              }}
+            >
+              <div style={{ flex: 1 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: 8,
+                    alignItems: "center",
+                    marginBottom: 12,
+                    color: "var(--accent)",
+                    fontSize: 11,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                    fontWeight: 700,
+                  }}
+                >
+                  <Rocket size={14} className="text-glow-green" />
+                  <span>Hiring Intelligence Command</span>
                 </div>
-              ))
-            ) : (
-              <>
-                <ScoreCard title="Frontend" score={stats?.avgScores?.frontend || 0} delay={0.1} />
-                <ScoreCard title="Backend" score={stats?.avgScores?.backend || 0} delay={0.15} />
-                <ScoreCard title="Security" score={stats?.avgScores?.security || 0} delay={0.2} />
-                <ScoreCard title="Testing" score={stats?.avgScores?.testing || 0} delay={0.25} />
-              </>
-            )}
-          </div>
+
+                <h2
+                  style={{
+                    fontSize: 28,
+                    fontWeight: 800,
+                    color: "#F8FAFC",
+                    marginBottom: 8,
+                    letterSpacing: "-0.02em",
+                  }}
+                >
+                  Your Hiring Readiness
+                </h2>
+
+                <p
+                  style={{
+                    color: "var(--text-secondary)",
+                    maxWidth: 380,
+                    lineHeight: 1.5,
+                    fontSize: 14,
+                  }}
+                >
+                  AI evaluated your repositories, architecture patterns, security, testing practices and code quality.
+                </p>
+
+                <div
+                  style={{
+                    display: "flex",
+                    gap: 12,
+                    marginTop: 24,
+                  }}
+                >
+                  <Link to="/analysis" className="btn-primary">
+                    <Plus size={15} />
+                    Analyze Repository
+                  </Link>
+
+                  <Link to="/roadmap" className="btn-secondary">
+                    <Target size={15} />
+                    Career Roadmap
+                  </Link>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  textAlign: "center",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  paddingRight: 10,
+                }}
+              >
+                <ScoreRing score={overallScore} />
+
+                <p
+                  className="cyber-mono"
+                  style={{
+                    marginTop: 14,
+                    fontWeight: 800,
+                    fontSize: 15,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.05em",
+                    color: getScoreColor(overallScore),
+                    textShadow: `0 0 10px ${getScoreColor(overallScore)}30`,
+                  }}
+                >
+                  {getScoreLabel(overallScore)}
+                </p>
+
+                <span
+                  className="cyber-mono"
+                  style={{
+                    color: "var(--text-muted)",
+                    fontSize: 11,
+                    marginTop: 4,
+                  }}
+                >
+                  {stats?.analysisCount || 0} REPOS EVALUATED
+                </span>
+              </div>
+            </div>
+          </GlassCard>
+
+          {/* AI Engineer Insights */}
+          <GlassCard>
+            <div
+              style={{
+                display: "flex",
+                gap: 8,
+                alignItems: "center",
+                marginBottom: 16,
+              }}
+            >
+              <Sparkles
+                size={15}
+                color="#00E676"
+                style={{ filter: "drop-shadow(0 0 4px var(--accent))" }}
+              />
+              <h3
+                style={{
+                  color: "#F8FAFC",
+                  fontSize: 14,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                  fontWeight: 700,
+                }}
+              >
+                AI Diagnosis Notes
+              </h3>
+            </div>
+
+            <Insight
+              type="success"
+              text="Strong modern development practices and clean project organization."
+            />
+
+            <Insight
+              type="warning"
+              text="Increase automated testing coverage to reach the next engineering level."
+            />
+
+            <Insight
+              type="info"
+              text="Learning Docker and CI/CD can significantly improve your production readiness."
+            />
+
+            <div
+              style={{
+                marginTop: 18,
+                padding: 12,
+                borderRadius: 12,
+                background: "linear-gradient(135deg, rgba(0,230,118,.05), rgba(59,130,246,.03))",
+                border: "1px dashed rgba(0,230,118,.2)",
+              }}
+            >
+              <div
+                className="cyber-mono"
+                style={{
+                  fontSize: 10,
+                  color: "#00E676",
+                  fontWeight: 700,
+                  letterSpacing: "0.1em",
+                }}
+              >
+                // NEXT MILESTONE TARGET
+              </div>
+
+              <p
+                style={{
+                  color: "#F8FAFC",
+                  marginTop: 6,
+                  fontSize: 13,
+                  lineHeight: 1.5,
+                }}
+              >
+                Improve your testing score by <strong style={{ color: "#00E676" }}>15%</strong> to unlock Senior Engineer readiness.
+              </p>
+            </div>
+          </GlassCard>
         </div>
 
-        {/* ── Charts Row ────────────────────────────────────── */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 24 }}>
-          {/* Radar Chart */}
-          <motion.div
-            className="glass-card"
-            initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            style={{ padding: 24 }}
-          >
-            <h2 style={{ fontSize: 15, fontWeight: 700, marginBottom: 20 }}>Skill Radar</h2>
-            {isLoading || radarData.length === 0 ? (
-              <div style={{ height: 220, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {isLoading ? <Skeleton h={200} /> : (
-                  <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>Analyze repos to see your radar</p>
-                )}
-              </div>
-            ) : (
-              <ResponsiveContainer width="100%" height={220}>
-                <RadarChart data={radarData}>
-                  <PolarGrid stroke="rgba(99,102,241,0.15)" />
-                  <PolarAngleAxis dataKey="dimension" tick={{ fill: '#8b9cc8', fontSize: 11 }} />
-                  <Radar name="Score" dataKey="score" stroke="#6366f1" fill="#6366f1" fillOpacity={0.15} strokeWidth={2} />
-                  <Tooltip content={<RadarTooltip />} />
-                </RadarChart>
-              </ResponsiveContainer>
-            )}
-          </motion.div>
+        {/* ===============================
+            Engineering Analytics Grid
+        ================================ */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 20,
+            marginBottom: 24,
+          }}
+        >
+          {/* Engineering Pillars */}
+          <GlassCard>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                marginBottom: 22,
+              }}
+            >
+              <Code2 size={16} color="var(--accent)" />
+              <h3
+                style={{
+                  fontSize: 14,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                  fontWeight: 700,
+                  color: "#F8FAFC",
+                }}
+              >
+                Engineering Pillars
+              </h3>
+            </div>
+
+            <SkillPillar
+              title="Frontend"
+              score={stats?.avgScores?.frontend || 0}
+              icon={<Code2 size={15} />}
+            />
+
+            <SkillPillar
+              title="Backend"
+              score={stats?.avgScores?.backend || 0}
+              icon={<Rocket size={15} />}
+            />
+
+            <SkillPillar
+              title="Security"
+              score={stats?.avgScores?.security || 0}
+              icon={<Shield size={15} />}
+            />
+
+            <SkillPillar
+              title="Testing"
+              score={stats?.avgScores?.testing || 0}
+              icon={<TestTube size={15} />}
+            />
+
+            <div
+              style={{
+                marginTop: 20,
+                padding: "12px 16px",
+                borderRadius: 12,
+                background: "rgba(59,130,246,0.04)",
+                border: "1px solid rgba(59,130,246,0.12)",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <p
+                className="cyber-mono"
+                style={{
+                  fontSize: 11,
+                  color: "#60A5FA",
+                  fontWeight: 700,
+                  letterSpacing: "0.05em",
+                }}
+              >
+                SYSTEM DIAGNOSIS:
+              </p>
+
+              <h4
+                className="cyber-mono"
+                style={{
+                  color: "#F8FAFC",
+                  fontSize: 14,
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                }}
+              >
+                {overallScore >= 85
+                  ? "Senior Engineer"
+                  : overallScore >= 70
+                  ? "Mid-Level Engineer"
+                  : "Junior Engineer"}
+              </h4>
+            </div>
+          </GlassCard>
+
+          {/* Career Journey */}
+          <GlassCard>
+            <div
+              style={{
+                display: "flex",
+                gap: 10,
+                alignItems: "center",
+                marginBottom: 22,
+              }}
+            >
+              <TrendingUp size={16} color="var(--accent)" />
+              <h3
+                style={{
+                  color: "#F8FAFC",
+                  fontSize: 14,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                  fontWeight: 700,
+                }}
+              >
+                Career Progress Map
+              </h3>
+            </div>
+
+            <div
+              style={{
+                marginTop: 10,
+                position: "relative",
+                paddingLeft: 8,
+              }}
+            >
+              {/* Vertical timeline track line */}
+              <div
+                style={{
+                  position: "absolute",
+                  left: 15,
+                  top: 8,
+                  bottom: 24,
+                  width: 2,
+                  background: "linear-gradient(180deg, #00E676 40%, rgba(255,255,255,0.06) 80%)",
+                  zIndex: 0,
+                }}
+              />
+
+              {[
+                "Junior Engineer",
+                "Mid-Level Engineer",
+                "Senior Engineer",
+              ].map((level, index) => {
+                const active =
+                  (overallScore >= 40 && index === 0) ||
+                  (overallScore >= 70 && index === 1) ||
+                  (overallScore >= 85 && index === 2);
+
+                return (
+                  <div
+                    key={level}
+                    style={{
+                      display: "flex",
+                      gap: 20,
+                      marginBottom: 20,
+                      position: "relative",
+                      zIndex: 1,
+                    }}
+                  >
+                    {/* Glowing Node dot */}
+                    <div style={{ flexShrink: 0, width: 16, height: 16, marginTop: 4, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      {active ? (
+                        <div className="pulse-ring-container" style={{ width: 12, height: 12 }}>
+                          <div className="pulse-ring-outer" />
+                          <div
+                            style={{
+                              width: 8,
+                              height: 8,
+                              borderRadius: "50%",
+                              background: "#00E676",
+                              boxShadow: "0 0 10px #00E676",
+                              position: "relative",
+                              zIndex: 3,
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <div
+                          style={{
+                            width: 8,
+                            height: 8,
+                            borderRadius: "50%",
+                            background: "rgba(255,255,255,0.12)",
+                            border: "1px solid rgba(255,255,255,0.2)",
+                          }}
+                        />
+                      )}
+                    </div>
+
+                    <div>
+                      <h4
+                        style={{
+                          color: active ? "#F8FAFC" : "var(--text-secondary)",
+                          fontSize: 14,
+                          fontWeight: 600,
+                        }}
+                      >
+                        {level}
+                      </h4>
+
+                      <p
+                        style={{
+                          color: active ? "var(--text-secondary)" : "var(--text-muted)",
+                          fontSize: 12,
+                          marginTop: 4,
+                          lineHeight: 1.4,
+                        }}
+                      >
+                        {index === 0 &&
+                          "Build fundamentals, clean code and project experience."}
+
+                        {index === 1 &&
+                          "Master architecture, scalability and production systems."}
+
+                        {index === 2 &&
+                          "Lead engineering decisions and design complex systems."}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </GlassCard>
+        </div>
+
+        {/* ===============================
+            Charts & Intelligence Map
+        ================================ */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 20,
+            marginBottom: 24,
+          }}
+        >
+          {/* Skill Radar */}
+          <GlassCard>
+            <h3
+              style={{
+                color: "#F8FAFC",
+                marginBottom: 18,
+                fontSize: 14,
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                fontWeight: 700,
+              }}
+            >
+              Skill Intelligence Map
+            </h3>
+
+            <ResponsiveContainer width="100%" height={280}>
+              <RadarChart data={radarData}>
+                <PolarGrid stroke="rgba(255,255,255,0.04)" />
+                <PolarAngleAxis
+                  dataKey="dimension"
+                  tick={{
+                    fill: "#94A3B8",
+                    fontSize: 11,
+                    fontFamily: "monospace",
+                  }}
+                />
+                <Radar
+                  dataKey="score"
+                  stroke="#00E676"
+                  fill="#00E676"
+                  fillOpacity={0.08}
+                  strokeWidth={2}
+                  style={{
+                    filter: "drop-shadow(0 0 8px rgba(0,230,118,0.25))",
+                  }}
+                />
+              </RadarChart>
+            </ResponsiveContainer>
+          </GlassCard>
 
           {/* Growth Timeline */}
-          <motion.div
-            className="glass-card"
-            initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            style={{ padding: 24 }}
-          >
-            <h2 style={{ fontSize: 15, fontWeight: 700, marginBottom: 20 }}>Score Timeline</h2>
-            {isLoading || timelineData.length === 0 ? (
-              <div style={{ height: 220, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {isLoading ? <Skeleton h={200} /> : (
-                  <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>Analyze multiple repos to see growth</p>
-                )}
-              </div>
-            ) : (
-              <ResponsiveContainer width="100%" height={220}>
-                <LineChart data={timelineData}>
-                  <CartesianGrid stroke="rgba(99,102,241,0.08)" vertical={false} />
-                  <XAxis dataKey="name" tick={{ fill: '#8b9cc8', fontSize: 10 }} axisLine={false} tickLine={false} />
-                  <YAxis domain={[0, 100]} tick={{ fill: '#8b9cc8', fontSize: 10 }} axisLine={false} tickLine={false} />
-                  <Tooltip
-                    contentStyle={{
-                      background: '#0f1724', border: '1px solid rgba(99,102,241,0.2)',
-                      borderRadius: 8, fontSize: 13, color: '#f0f4ff',
-                    }}
-                  />
-                  <Line type="monotone" dataKey="score" stroke="#6366f1" strokeWidth={2} dot={{ fill: '#6366f1', strokeWidth: 0, r: 4 }} />
-                </LineChart>
-              </ResponsiveContainer>
-            )}
-          </motion.div>
+          <GlassCard>
+            <h3
+              style={{
+                color: "#F8FAFC",
+                marginBottom: 18,
+                fontSize: 14,
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                fontWeight: 700,
+              }}
+            >
+              Engineering Growth Timeline
+            </h3>
+
+            <ResponsiveContainer width="100%" height={280}>
+              <AreaChart data={timelineData}>
+                <defs>
+                  <linearGradient id="scoreFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#00E676" stopOpacity={0.25} />
+                    <stop offset="95%" stopColor="#00E676" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid stroke="rgba(255,255,255,0.03)" strokeDasharray="3 3" vertical={false} />
+                <XAxis
+                  dataKey="name"
+                  tick={{
+                    fill: "#94A3B8",
+                    fontSize: 11,
+                    fontFamily: "monospace",
+                  }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <YAxis
+                  domain={[0, 100]}
+                  tick={{
+                    fill: "#94A3B8",
+                    fontSize: 11,
+                    fontFamily: "monospace",
+                  }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <Tooltip
+                  contentStyle={{
+                    background: "rgba(10, 15, 30, 0.9)",
+                    backdropFilter: "blur(8px)",
+                    border: "1px solid rgba(0, 230, 118, 0.2)",
+                    borderRadius: 12,
+                    color: "#F8FAFC",
+                    boxShadow: "0 10px 25px rgba(0,0,0,0.5)",
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontSize: 12,
+                  }}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="score"
+                  stroke="#00E676"
+                  strokeWidth={2.5}
+                  fill="url(#scoreFill)"
+                  dot={{
+                    fill: "#00E676",
+                    r: 4,
+                    strokeWidth: 0,
+                  }}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </GlassCard>
         </div>
 
-        {/* ── Recent Analyses ────────────────────────────────── */}
-        <motion.div
-          className="glass-card"
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          style={{ padding: 24 }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-            <h2 style={{ fontSize: 15, fontWeight: 700 }}>Recent Analyses</h2>
-            <Link to="/analysis" className="btn-primary" style={{ padding: '7px 14px', fontSize: 13 }}>
-              <Plus size={15} /> New Analysis
+        {/* ===============================
+            Repository Intelligence
+        ================================ */}
+        <GlassCard>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 24,
+              borderBottom: "1px dashed rgba(255,255,255,0.06)",
+              paddingBottom: 16,
+            }}
+          >
+            <div>
+              <h3
+                style={{
+                  color: "#F8FAFC",
+                  fontSize: 16,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                  fontWeight: 700,
+                }}
+              >
+                Repository Intelligence Reports
+              </h3>
+
+              <p
+                style={{
+                  color: "var(--text-muted)",
+                  marginTop: 4,
+                  fontSize: 13,
+                }}
+              >
+                AI-powered engineering reports from your latest repositories.
+              </p>
+            </div>
+
+            <Link to="/analysis" className="btn-primary">
+              <Plus size={15} />
+              Analyze Repository
             </Link>
           </div>
 
+          {/* Loading State */}
           {isLoading ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              {[...Array(3)].map((_, i) => <Skeleton key={i} h={56} />)}
+            <div style={{ display: "grid", gap: 16 }}>
+              {[1, 2, 3].map((item) => (
+                <div
+                  key={item}
+                  style={{
+                    height: 80,
+                    borderRadius: 16,
+                    background: "rgba(255,255,255,0.02)",
+                    border: "1px solid rgba(255,255,255,0.04)",
+                    animation: "shimmer 1.5s infinite",
+                  }}
+                />
+              ))}
             </div>
           ) : !stats?.recentAnalyses?.length ? (
-            <div style={{ textAlign: 'center', padding: '40px 20px' }}>
-              <GitBranch size={32} style={{ color: 'var(--text-muted)', marginBottom: 12, margin: '0 auto 12px' }} />
-              <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 8 }}>No analyses yet</p>
-              <p style={{ fontSize: 14, color: 'var(--text-muted)', marginBottom: 20 }}>
-                Connect your GitHub repos to get started
+            /* Empty State */
+            <div style={{ padding: "60px 20px", textAlign: "center" }}>
+              <div
+                style={{
+                  width: 64,
+                  height: 64,
+                  margin: "0 auto",
+                  borderRadius: 16,
+                  background: "rgba(0,230,118,0.05)",
+                  border: "1px solid rgba(0,230,118,0.12)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxShadow: "0 0 20px rgba(0, 230, 118, 0.05)",
+                }}
+              >
+                <GitBranch size={28} color="var(--accent)" />
+              </div>
+
+              <h3
+                style={{
+                  marginTop: 20,
+                  color: "#F8FAFC",
+                  fontSize: 18,
+                  fontWeight: 700,
+                }}
+              >
+                No repositories analyzed yet
+              </h3>
+
+              <p
+                style={{
+                  marginTop: 8,
+                  color: "var(--text-muted)",
+                  maxWidth: 400,
+                  marginInline: "auto",
+                  lineHeight: 1.6,
+                  fontSize: 14,
+                }}
+              >
+                Connect your GitHub repositories and let AI evaluate your code quality, architecture, security, and engineering readiness.
               </p>
-              <Link to="/analysis" className="btn-primary">
-                <Plus size={15} /> Analyze a Repository
+
+              <Link
+                to="/analysis"
+                className="btn-primary"
+                style={{
+                  marginTop: 20,
+                  display: "inline-flex",
+                }}
+              >
+                <Plus size={15} />
+                Start Your First Analysis
               </Link>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {stats.recentAnalyses.map((analysis, i) => (
+            /* Repository Cards */
+            <div style={{ display: "grid", gap: 12 }}>
+              {stats.recentAnalyses.map((repo, index) => (
                 <motion.div
-                  key={analysis._id}
-                  initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.5 + i * 0.06 }}
+                  key={repo._id}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
                 >
                   <Link
-                    to={`/analysis/${analysis._id}`}
+                    to={`/analysis/${repo._id}`}
                     style={{
-                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                      padding: '12px 16px', borderRadius: 8, textDecoration: 'none',
-                      border: '1px solid var(--border)', transition: 'all 0.15s',
-                      background: 'transparent',
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "16px 20px",
+                      borderRadius: 14,
+                      textDecoration: "none",
+                      border: "1px solid rgba(255,255,255,0.04)",
+                      background: "rgba(255,255,255,0.01)",
+                      transition: "all .25s cubic-bezier(0.16, 1, 0.3, 1)",
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = 'var(--border-strong)'
-                      e.currentTarget.style.background = 'rgba(99,102,241,0.04)'
+                      e.currentTarget.style.transform = "translateY(-2px)";
+                      e.currentTarget.style.borderColor = "rgba(0,230,118,0.25)";
+                      e.currentTarget.style.background = "rgba(255,255,255,0.03)";
+                      e.currentTarget.style.boxShadow = "0 8px 25px rgba(0,0,0,0.3)";
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = 'var(--border)'
-                      e.currentTarget.style.background = 'transparent'
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.borderColor = "rgba(255,255,255,0.04)";
+                      e.currentTarget.style.background = "rgba(255,255,255,0.01)";
+                      e.currentTarget.style.boxShadow = "none";
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                      <div style={{
-                        width: 34, height: 34, borderRadius: 8,
-                        background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        color: '#818cf8', flexShrink: 0,
-                      }}>
-                        <GitBranch size={16} />
+                    {/* Left Side */}
+                    <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
+                      <div
+                        style={{
+                          width: 40,
+                          height: 40,
+                          borderRadius: 10,
+                          background: "rgba(0,230,118,0.05)",
+                          border: "1px solid rgba(0,230,118,0.12)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          boxShadow: "0 0 12px rgba(0, 230, 118, 0.05)",
+                        }}
+                      >
+                        <GitBranch size={16} color="var(--accent)" />
                       </div>
+
                       <div>
-                        <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)' }}>{analysis.repoName}</p>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>
-                          <Clock size={11} style={{ color: 'var(--text-muted)' }} />
-                          <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>{timeAgo(analysis.createdAt)}</p>
-                          {analysis.language && (
-                            <span className="badge badge-blue" style={{ fontSize: 10, padding: '2px 7px' }}>{analysis.language}</span>
+                        <h4 style={{ color: "#F8FAFC", fontWeight: 700, fontSize: 15 }}>
+                          {repo.repoName}
+                        </h4>
+
+                        <div style={{ display: "flex", gap: 10, marginTop: 4, alignItems: "center" }}>
+                          <Clock size={11} color="var(--text-muted)" />
+                          <span className="cyber-mono" style={{ color: "var(--text-muted)", fontSize: 11 }}>
+                            {timeAgo(repo.createdAt)}
+                          </span>
+
+                          {repo.language && (
+                            <span
+                              className="cyber-mono"
+                              style={{
+                                padding: "2px 8px",
+                                borderRadius: 4,
+                                fontSize: 10,
+                                background: "rgba(59,130,246,0.08)",
+                                border: "1px solid rgba(59,130,246,0.15)",
+                                color: "#60A5FA",
+                              }}
+                            >
+                              {repo.language}
+                            </span>
                           )}
                         </div>
                       </div>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                      <div style={{ textAlign: 'right' }}>
-                        <p style={{ fontSize: 18, fontWeight: 800, color: getScoreColor(analysis.scores?.overall || 0) }}>
-                          {analysis.scores?.overall || 0}
-                        </p>
-                        <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>score</p>
+
+                    {/* Right Side */}
+                    <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+                      <div style={{ textAlign: "right" }}>
+                        <div
+                          className="cyber-mono"
+                          style={{
+                            fontSize: 22,
+                            fontWeight: 800,
+                            color: getScoreColor(repo.scores?.overall || 0),
+                            textShadow: `0 0 10px ${getScoreColor(repo.scores?.overall || 0)}20`,
+                          }}
+                        >
+                          {repo.scores?.overall || 0}
+                        </div>
+                        <div style={{ fontSize: 10, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 600 }}>
+                          readiness
+                        </div>
                       </div>
-                      <ArrowRight size={16} style={{ color: 'var(--text-muted)' }} />
+                      <ArrowRight size={16} color="var(--text-muted)" />
                     </div>
                   </Link>
                 </motion.div>
               ))}
             </div>
           )}
-        </motion.div>
+        </GlassCard>
       </main>
     </div>
-  )
+  );
+
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { Zap, Menu, X, ChevronRight } from 'lucide-react'
+import { Zap, Menu, X } from 'lucide-react'
 import { useAuth } from '../../lib/authContext'
 
 const GithubIcon = ({ size = 18, color = 'currentColor', ...props }) => (
@@ -36,26 +36,37 @@ export default function Navbar() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4 }}
       style={{
-        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
-        padding: '0 24px', height: 60,
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        transition: 'all 0.3s ease',
-        background: scrolled ? 'rgba(8,11,20,0.9)' : 'transparent',
-        backdropFilter: scrolled ? 'blur(16px)' : 'none',
-        borderBottom: scrolled ? '1px solid var(--border)' : '1px solid transparent',
+        position: 'fixed',
+        top: scrolled ? 12 : 0,
+        left: scrolled ? '5%' : 0,
+        right: scrolled ? '5%' : 0,
+        zIndex: 1000,
+        padding: '0 24px',
+        height: 56,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+        background: scrolled ? 'rgba(11, 17, 30, 0.75)' : 'rgba(8, 11, 18, 0.15)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        border: scrolled ? '1px solid rgba(0, 230, 118, 0.2)' : '1px solid rgba(255,255,255,0.03)',
+        borderRadius: scrolled ? 16 : 0,
+        boxShadow: scrolled ? '0 10px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 230, 118, 0.05)' : 'none',
       }}
     >
       {/* Logo */}
-      <Link to={user ? '/dashboard' : '/'} style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
+      <Link to={user ? '/dashboard' : '/'} style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
         <div style={{
           width: 30, height: 30, borderRadius: 8,
-          background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+          background: 'linear-gradient(135deg, #00E676, #00C853)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
+          boxShadow: '0 0 12px rgba(0, 230, 118, 0.25)',
         }}>
-          <Zap size={16} fill="white" color="white" />
+          <Zap size={14} fill="#080B12" color="#080B12" />
         </div>
-        <span style={{ fontWeight: 800, fontSize: 16, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-          DevScope <span style={{ color: '#818cf8' }}>AI</span>
+        <span style={{ fontWeight: 800, fontSize: 16, color: 'var(--text-primary)', letterSpacing: '-0.03em' }}>
+          DevScope <span style={{ color: '#00E676' }}>AI</span>
         </span>
       </Link>
 
@@ -66,9 +77,19 @@ export default function Navbar() {
             <a
               key={link.label}
               href={link.href}
-              style={{ color: 'var(--text-secondary)', fontSize: 14, fontWeight: 500, textDecoration: 'none', transition: 'color 0.15s' }}
-              onMouseEnter={(e) => e.target.style.color = 'var(--text-primary)'}
-              onMouseLeave={(e) => e.target.style.color = 'var(--text-secondary)'}
+              style={{
+                color: 'var(--text-secondary)', fontSize: 13, fontWeight: 500,
+                textDecoration: 'none', transition: 'all 0.15s ease',
+                letterSpacing: '-0.01em',
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.color = '#00E676';
+                e.target.style.textShadow = '0 0 8px rgba(0,230,118,0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.color = 'var(--text-secondary)';
+                e.target.style.textShadow = 'none';
+              }}
             >
               {link.label}
             </a>
@@ -78,7 +99,7 @@ export default function Navbar() {
 
       {/* Dashboard quick links */}
       {isDashboard && user && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           {[
             { to: '/dashboard', label: 'Dashboard' },
             { to: '/analysis', label: 'Analysis' },
@@ -90,9 +111,9 @@ export default function Navbar() {
               to={link.to}
               style={{
                 padding: '6px 12px', borderRadius: 6, fontSize: 13, fontWeight: 500,
-                color: location.pathname === link.to ? 'var(--accent-light)' : 'var(--text-secondary)',
+                color: location.pathname === link.to ? '#00E676' : 'var(--text-secondary)',
                 textDecoration: 'none',
-                background: location.pathname === link.to ? 'rgba(99,102,241,0.1)' : 'transparent',
+                background: location.pathname === link.to ? 'rgba(0,230,118,0.08)' : 'transparent',
                 transition: 'all 0.15s',
               }}
             >
@@ -109,12 +130,15 @@ export default function Navbar() {
             <img
               src={user.avatar}
               alt={user.username}
-              style={{ width: 30, height: 30, borderRadius: '50%', border: '2px solid var(--border-strong)' }}
+              style={{
+                width: 30, height: 30, borderRadius: '50%',
+                border: '2px solid var(--border-strong)',
+              }}
             />
             <button
               onClick={logout}
               className="btn-secondary"
-              style={{ padding: '7px 14px', fontSize: 13 }}
+              style={{ padding: '6px 14px', fontSize: 13 }}
             >
               Sign Out
             </button>
@@ -126,7 +150,7 @@ export default function Navbar() {
             style={{ padding: '8px 16px', fontSize: 13 }}
             id="nav-cta"
           >
-            <GithubIcon size={15} /> Connect GitHub
+            <GithubIcon size={14} color="#080B12" /> Connect GitHub
           </button>
         )}
 

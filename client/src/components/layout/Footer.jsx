@@ -21,69 +21,87 @@ const LinkedinIcon = ({ size = 15 }) => (
 export default function Footer() {
   return (
     <footer style={{
-      padding: '60px 24px 32px',
-      background: 'var(--bg-primary)',
-      borderTop: '1px solid var(--border)',
+      padding: '64px 24px 32px',
+      background: '#050711',
+      borderTop: '1px dashed rgba(255, 255, 255, 0.08)',
     }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 40, marginBottom: 48 }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
               <div style={{
                 width: 28, height: 28, borderRadius: 7,
-                background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+                background: 'linear-gradient(135deg, #00E676, #00C853)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 0 12px rgba(0, 230, 118, 0.25)',
               }}>
-                <Zap size={14} fill="white" color="white" />
+                <Zap size={14} fill="#080B12" color="#080B12" />
               </div>
-              <span style={{ fontWeight: 800, fontSize: 15, letterSpacing: '-0.02em' }}>
-                DevScope <span style={{ color: '#818cf8' }}>AI</span>
+              <span style={{ fontWeight: 800, fontSize: 15, letterSpacing: '-0.03em', color: '#f8fafc' }}>
+                DevScope <span style={{ color: '#00E676' }}>AI</span>
               </span>
             </div>
-            <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.6, maxWidth: 220 }}>
-              The definitive platform for developer job readiness assessment.
+            <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.7, maxWidth: 220 }}>
+              AI-powered engineering career intelligence. Know if you're actually job ready.
             </p>
           </div>
 
           <div>
-            <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 16 }}>Product</p>
+            <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 16 }}>Product</p>
             {['Features', 'How It Works', 'Pricing', 'Sample Report'].map((item) => (
-              <a key={item} href="#" style={{ display: 'block', fontSize: 14, color: 'var(--text-secondary)', textDecoration: 'none', marginBottom: 10, transition: 'color 0.15s' }}
-                onMouseEnter={(e) => e.target.style.color = 'var(--text-primary)'}
+              <a key={item} href="#" style={{ display: 'block', fontSize: 13, color: 'var(--text-secondary)', textDecoration: 'none', marginBottom: 10, transition: 'color 0.15s' }}
+                onMouseEnter={(e) => e.target.style.color = '#00E676'}
                 onMouseLeave={(e) => e.target.style.color = 'var(--text-secondary)'}
               >{item}</a>
             ))}
           </div>
 
           <div>
-            <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 16 }}>Company</p>
+            <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 16 }}>Company</p>
             {['About', 'Blog', 'Careers', 'Contact'].map((item) => (
-              <a key={item} href="#" style={{ display: 'block', fontSize: 14, color: 'var(--text-secondary)', textDecoration: 'none', marginBottom: 10 }}>{item}</a>
+              <a key={item} href="#" style={{ display: 'block', fontSize: 13, color: 'var(--text-secondary)', textDecoration: 'none', marginBottom: 10, transition: 'color 0.15s' }}
+                onMouseEnter={(e) => e.target.style.color = '#00E676'}
+                onMouseLeave={(e) => e.target.style.color = 'var(--text-secondary)'}
+              >{item}</a>
             ))}
           </div>
 
           <div>
-            <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 16 }}>Legal</p>
+            <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 16 }}>Legal</p>
             {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((item) => (
-              <a key={item} href="#" style={{ display: 'block', fontSize: 14, color: 'var(--text-secondary)', textDecoration: 'none', marginBottom: 10 }}>{item}</a>
+              <a key={item} href="#" style={{ display: 'block', fontSize: 13, color: 'var(--text-secondary)', textDecoration: 'none', marginBottom: 10, transition: 'color 0.15s' }}
+                onMouseEnter={(e) => e.target.style.color = '#00E676'}
+                onMouseLeave={(e) => e.target.style.color = 'var(--text-secondary)'}
+              >{item}</a>
             ))}
           </div>
         </div>
 
-        <div style={{ borderTop: '1px solid var(--border)', paddingTop: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
-          <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>© 2025 DevScope AI. All rights reserved.</p>
-          <div style={{ display: 'flex', gap: 12 }}>
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+          <p className="cyber-mono" style={{ fontSize: 12, color: 'var(--text-muted)' }}>© 2025 DEVSCOPE AI. ALL RIGHTS RESERVED.</p>
+          <div style={{ display: 'flex', gap: 10 }}>
             {[GithubIcon, TwitterIcon, LinkedinIcon].map((Icon, i) => (
               <a key={i} href="#" style={{
                 width: 32, height: 32, borderRadius: 8,
-                border: '1px solid var(--border)',
+                border: '1px solid rgba(255,255,255,0.05)',
+                background: 'rgba(255,255,255,0.01)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                color: 'var(--text-muted)', textDecoration: 'none', transition: 'all 0.15s',
+                color: 'var(--text-muted)', textDecoration: 'none', transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
               }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--border-strong)'; e.currentTarget.style.color = 'var(--text-primary)' }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-muted)' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(0, 230, 118, 0.3)';
+                  e.currentTarget.style.color = '#00E676';
+                  e.currentTarget.style.background = 'rgba(0, 230, 118, 0.03)';
+                  e.currentTarget.style.boxShadow = '0 0 10px rgba(0, 230, 118, 0.1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)';
+                  e.currentTarget.style.color = 'var(--text-muted)';
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.01)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
               >
-                <Icon size={15} />
+                <Icon size={14} />
               </a>
             ))}
           </div>

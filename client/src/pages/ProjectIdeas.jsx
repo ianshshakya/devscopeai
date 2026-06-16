@@ -11,7 +11,7 @@ const SKILL_LEVELS = [
 ]
 
 const ROLES = [
-  { value: 'Frontend Developer', icon: <Code2 size={16} />, color: '#6366f1' },
+  { value: 'Frontend Developer', icon: <Code2 size={16} />, color: '#00E676' },
   { value: 'Backend Developer', icon: <Server size={16} />, color: '#a855f7' },
   { value: 'Full Stack Developer', icon: <Globe size={16} />, color: '#10b981' },
   { value: 'Mobile Developer', icon: <Smartphone size={16} />, color: '#f59e0b' },
@@ -104,8 +104,8 @@ export default function ProjectIdeas() {
                   onClick={() => setSkillLevel(level.value)}
                   style={{
                     padding: '14px 16px', borderRadius: 10, cursor: 'pointer', textAlign: 'left',
-                    border: skillLevel === level.value ? '2px solid #6366f1' : '1px solid var(--border)',
-                    background: skillLevel === level.value ? 'rgba(99,102,241,0.08)' : 'rgba(15,23,36,0.5)',
+                    border: skillLevel === level.value ? '2px solid var(--accent)' : '1px solid var(--border)',
+                    background: skillLevel === level.value ? 'rgba(0,230,118,0.08)' : 'rgba(15,23,36,0.5)',
                     transition: 'all 0.15s',
                   }}
                 >
@@ -215,8 +215,8 @@ export default function ProjectIdeas() {
                     <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: 12 }}>{idea.description}</p>
 
                     {/* Why it matters */}
-                    <div style={{ padding: '8px 12px', borderRadius: 8, background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.15)', marginBottom: 12 }}>
-                      <p style={{ fontSize: 12, color: '#818cf8', fontWeight: 600, marginBottom: 3 }}>💼 Why recruiters love this</p>
+                    <div style={{ padding: '8px 12px', borderRadius: 8, background: 'rgba(0,230,118,0.06)', border: '1px solid rgba(0,230,118,0.15)', marginBottom: 12 }}>
+                      <p style={{ fontSize: 12, color: '#69F0AE', fontWeight: 600, marginBottom: 3 }}>💼 Why recruiters love this</p>
                       <p style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.5 }}>{idea.whyItMatters}</p>
                     </div>
 

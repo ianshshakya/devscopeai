@@ -504,12 +504,12 @@ export default function RoastPage() {
                   transition={{ delay: 1.1 }}
                   style={{
                     padding: '24px 28px', borderRadius: 20, textAlign: 'center',
-                    background: 'linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(139,92,246,0.12) 100%)',
-                    border: '1px solid rgba(99,102,241,0.25)',
+                    background: 'linear-gradient(135deg, rgba(0,230,118,0.12) 0%, rgba(0,200,83,0.12) 100%)',
+                    border: '1px solid rgba(0,230,118,0.25)',
                   }}
                 >
-                  <Sparkles size={28} style={{ color: '#818cf8', marginBottom: 12 }} />
-                  <p style={{ fontSize: 17, fontWeight: 600, color: 'rgba(200,210,255,0.9)', lineHeight: 1.7, fontStyle: 'italic' }}>
+                  <Sparkles size={28} style={{ color: '#69F0AE', marginBottom: 12 }} />
+                  <p style={{ fontSize: 17, fontWeight: 600, color: 'rgba(200,255,230,0.9)', lineHeight: 1.7, fontStyle: 'italic' }}>
                     "{roast.encouragement}"
                   </p>
                 </motion.div>
@@ -542,13 +542,13 @@ export default function RoastPage() {
                   onClick={handleReset}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 8, padding: '12px 24px',
-                    borderRadius: 12, border: '1px solid rgba(99,102,241,0.3)',
-                    background: 'rgba(99,102,241,0.08)', color: '#818cf8',
+                    borderRadius: 12, border: '1px solid rgba(0,230,118,0.3)',
+                    background: 'rgba(0,230,118,0.08)', color: '#69F0AE',
                     cursor: 'pointer', fontWeight: 600, fontSize: 14,
                     transition: 'all 0.2s',
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(99,102,241,0.15)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
-                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(99,102,241,0.08)'; e.currentTarget.style.transform = 'translateY(0)' }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,230,118,0.15)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(0,230,118,0.08)'; e.currentTarget.style.transform = 'translateY(0)' }}
                 >
                   <RefreshCw size={15} /> Roast Someone Else
                 </button>

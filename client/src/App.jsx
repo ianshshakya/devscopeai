@@ -26,14 +26,14 @@ const ProtectedRoute = ({ children }) => {
 }
 
 const PageLoader = () => (
-  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#080b14' }}>
+  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#080B12' }}>
     <div style={{ textAlign: 'center' }}>
       <div style={{
-        width: 48, height: 48, border: '3px solid rgba(99,102,241,0.2)',
-        borderTopColor: '#6366f1', borderRadius: '50%',
-        animation: 'spin 0.8s linear infinite', margin: '0 auto 16px'
+        width: 44, height: 44, border: '3px solid rgba(0,230,118,0.12)',
+        borderTopColor: '#00E676', borderRadius: '50%',
+        animation: 'spin 0.8s linear infinite', margin: '0 auto 14px'
       }} />
-      <p style={{ color: '#8b9cc8', fontSize: 14 }}>Loading DevScope AI...</p>
+      <p style={{ color: '#94A3B8', fontSize: 13, fontWeight: 500 }}>Loading DevScope AI...</p>
     </div>
     <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
   </div>

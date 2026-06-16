@@ -81,7 +81,7 @@ export default function CareerReport() {
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-primary)' }}>
       <Sidebar />
-      <main style={{ marginLeft: 220, flex: 1, padding: '32px' }}>
+      <main style={{ marginLeft: 240, flex: 1, padding: '32px' }}>
 
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 32 }}>
@@ -127,8 +127,8 @@ export default function CareerReport() {
               initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
               style={{
                 padding: '24px 28px', marginBottom: 24,
-                background: 'linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(168,85,247,0.04) 100%)',
-                border: '1px solid rgba(99,102,241,0.25)',
+                background: 'linear-gradient(135deg, rgba(0,230,118,0.08) 0%, rgba(168,85,247,0.04) 100%)',
+                border: '1px solid rgba(0,230,118,0.25)',
                 display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap',
               }}
             >
@@ -150,7 +150,7 @@ export default function CareerReport() {
                         <span style={{ fontSize: 12, color: 'var(--text-secondary)', textTransform: 'capitalize' }}>{key}</span>
                         <span style={{ fontSize: 12, fontWeight: 700, color: getScoreColor(value) }}>{value}</span>
                       </div>
-                      <div style={{ height: 4, background: 'rgba(99,102,241,0.1)', borderRadius: 2, overflow: 'hidden' }}>
+                      <div style={{ height: 4, background: 'rgba(0,230,118,0.1)', borderRadius: 2, overflow: 'hidden' }}>
                         <motion.div
                           initial={{ width: 0 }} animate={{ width: `${value}%` }}
                           transition={{ duration: 1, ease: 'easeOut', delay: 0.3 }}

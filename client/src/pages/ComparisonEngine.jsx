@@ -44,7 +44,7 @@ export default function ComparisonEngine() {
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-primary)' }}>
       <Sidebar />
-      <main style={{ marginLeft: 220, flex: 1, padding: '32px' }}>
+      <main style={{ marginLeft: 240, flex: 1, padding: '32px' }}>
 
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: 32 }}>
           <h1 style={{ fontSize: 26, fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 6 }}>
@@ -88,7 +88,7 @@ export default function ComparisonEngine() {
                     const diff = overall - avg
                     return diff >= 0 ? `+${diff} above average` : `${diff} below average`
                   })(),
-                  color: '#6366f1',
+                  color: '#00E676',
                 },
                 {
                   icon: <Users size={20} />,
@@ -158,11 +158,11 @@ export default function ComparisonEngine() {
                       </div>
 
                       {/* Dual bar */}
-                      <div style={{ position: 'relative', height: 10, background: 'rgba(99,102,241,0.08)', borderRadius: 5, overflow: 'hidden' }}>
+                      <div style={{ position: 'relative', height: 10, background: 'rgba(0,230,118,0.08)', borderRadius: 5, overflow: 'hidden' }}>
                         {/* Platform average */}
                         <div style={{
                           position: 'absolute', left: 0, top: 0, height: '100%',
-                          width: `${platformAvg}%`, background: 'rgba(99,102,241,0.2)', borderRadius: 5,
+                          width: `${platformAvg}%`, background: 'rgba(0,230,118,0.2)', borderRadius: 5,
                         }} />
                         {/* User score */}
                         <motion.div
@@ -184,11 +184,11 @@ export default function ComparisonEngine() {
               {/* Legend */}
               <div style={{ display: 'flex', gap: 20, marginTop: 24, paddingTop: 20, borderTop: '1px solid var(--border)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--text-muted)' }}>
-                  <div style={{ width: 20, height: 6, background: '#6366f1', borderRadius: 3 }} />
+                  <div style={{ width: 20, height: 6, background: '#00E676', borderRadius: 3 }} />
                   Your Score
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--text-muted)' }}>
-                  <div style={{ width: 20, height: 6, background: 'rgba(99,102,241,0.3)', borderRadius: 3 }} />
+                  <div style={{ width: 20, height: 6, background: 'rgba(0,230,118,0.3)', borderRadius: 3 }} />
                   Platform Average
                 </div>
               </div>

@@ -248,7 +248,7 @@ export default function JobReadinessQuiz() {
     roleDesc = 'Outstanding! You demonstrate solid command of both frontend and backend concepts, database indexing, and scaling architectures.'
   } else if (overallPct >= 65) {
     if (categories.javascript.correct + categories.react.correct >= 5) {
-      recommendation = 'Junior Frontend Developer'
+      recommendation = 'Junior React Developer'
       roleDesc = 'Strong Frontend foundation! You have solid React and JS skills. Continue learning backend integration and database basics.'
     } else if (categories.backend.correct + categories.database.correct >= 5) {
       recommendation = 'Junior Backend Developer'
@@ -266,7 +266,7 @@ export default function JobReadinessQuiz() {
       {/* ── Ambient background glows ────────────────────────────── */}
       <div style={{
         position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0,
-        background: 'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(168,85,247,0.1) 0%, transparent 70%)',
+        background: 'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,230,118,0.08) 0%, transparent 70%)',
       }} />
 
       <main style={{ position: 'relative', zIndex: 1, maxWidth: 680, margin: '0 auto', padding: '100px 24px 80px' }}>
@@ -280,16 +280,16 @@ export default function JobReadinessQuiz() {
           >
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 16px',
-              background: 'rgba(168,85,247,0.1)', border: '1px solid rgba(168,85,247,0.25)',
+              background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.25)',
               borderRadius: 20, marginBottom: 20,
             }}>
-              <Target size={14} style={{ color: '#c084fc' }} />
-              <span style={{ fontSize: 13, color: '#c084fc', fontWeight: 600 }}>15 Questions • 8 Mins • Free</span>
+              <Target size={14} style={{ color: '#00E676' }} />
+              <span style={{ fontSize: 13, color: '#69F0AE', fontWeight: 600 }}>15 Questions • 8 Mins • Free</span>
             </div>
 
             <h1 style={{
               fontSize: 'clamp(36px, 6vw, 52px)', fontWeight: 900, letterSpacing: '-0.02em', marginBottom: 16, lineHeight: 1.1,
-              background: 'linear-gradient(135deg, #fff 0%, #d8b4fe 50%, #a855f7 100%)',
+              background: 'linear-gradient(135deg, #fff 0%, #69F0AE 50%, #00E676 100%)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
             }}>
               Job Readiness Test
@@ -312,8 +312,9 @@ export default function JobReadinessQuiz() {
               onClick={() => setStep('quiz')}
               style={{
                 padding: '14px 42px', fontSize: 16, fontWeight: 700,
-                background: 'linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)',
-                boxShadow: '0 4px 20px rgba(168,85,247,0.3)',
+                background: 'linear-gradient(135deg, #00E676 0%, #00C853 100%)',
+                boxShadow: '0 4px 20px rgba(0,230,118,0.3)',
+                color: '#080B12'
               }}
             >
               Start Assessment →
@@ -328,12 +329,12 @@ export default function JobReadinessQuiz() {
             <div style={{ marginBottom: 32 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, fontSize: 13, color: 'var(--text-muted)' }}>
                 <span>Question {qIdx + 1} of {QUESTIONS.length}</span>
-                <span>Category: <strong style={{ color: '#c084fc', textTransform: 'capitalize' }}>{currentQ.category}</strong></span>
+                <span>Category: <strong style={{ color: '#69F0AE', textTransform: 'capitalize' }}>{currentQ.category}</strong></span>
               </div>
               <div style={{ height: 4, background: 'rgba(255,255,255,0.06)', borderRadius: 2, overflow: 'hidden' }}>
                 <div style={{
                   height: '100%',
-                  background: 'linear-gradient(90deg, #a855f7, #6366f1)',
+                  background: 'linear-gradient(90deg, #00E676, #3B82F6)',
                   width: `${((qIdx) / QUESTIONS.length) * 100}%`,
                   transition: 'width 0.3s ease-in-out',
                 }} />
@@ -353,8 +354,8 @@ export default function JobReadinessQuiz() {
                   let textColor = 'var(--text-secondary)'
 
                   if (selectedOpt === oIdx) {
-                    border = '2px solid #a855f7'
-                    bg = 'rgba(168,85,247,0.06)'
+                    border = '2px solid #00E676'
+                    bg = 'rgba(0,230,118,0.06)'
                     textColor = 'var(--text-primary)'
                   }
 
@@ -398,8 +399,8 @@ export default function JobReadinessQuiz() {
                     disabled={selectedOpt === null}
                     className="btn-primary"
                     style={{
-                      background: selectedOpt === null ? 'rgba(255,255,255,0.04)' : 'linear-gradient(135deg, #a855f7 0%, #6366f1 100%)',
-                      color: selectedOpt === null ? 'var(--text-muted)' : 'white',
+                      background: selectedOpt === null ? 'rgba(255,255,255,0.04)' : 'linear-gradient(135deg, #00E676 0%, #00C853 100%)',
+                      color: selectedOpt === null ? 'var(--text-muted)' : '#080B12',
                       border: 'none',
                       cursor: selectedOpt === null ? 'not-allowed' : 'pointer',
                     }}
@@ -410,7 +411,7 @@ export default function JobReadinessQuiz() {
                   <button
                     onClick={handleNext}
                     className="btn-primary"
-                    style={{ background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)' }}
+                    style={{ background: 'linear-gradient(135deg, #00E676 0%, #00C853 100%)', color: '#080B12' }}
                   >
                     Next Question <ArrowRight size={16} />
                   </button>
@@ -424,9 +425,9 @@ export default function JobReadinessQuiz() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="glass-card"
-                style={{ padding: 20, borderLeft: '4px solid #a855f7' }}
+                style={{ padding: 20, borderLeft: '4px solid #00E676' }}
               >
-                <h4 style={{ fontWeight: 700, color: '#c084fc', fontSize: 14, marginBottom: 6 }}>💡 Explanation</h4>
+                <h4 style={{ fontWeight: 700, color: '#69F0AE', fontSize: 14, marginBottom: 6 }}>💡 Explanation</h4>
                 <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>{currentQ.explanation}</p>
               </motion.div>
             )}
@@ -437,7 +438,7 @@ export default function JobReadinessQuiz() {
         {step === 'results' && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div style={{ textAlign: 'center', marginBottom: 36 }}>
-              <Award size={48} style={{ color: '#a855f7', marginBottom: 12 }} />
+              <Award size={48} style={{ color: '#00E676', marginBottom: 12 }} />
               <h1 style={{ fontSize: 36, fontWeight: 900, marginBottom: 8 }}>Test Completed!</h1>
               <p style={{ color: 'var(--text-muted)', fontSize: 15 }}>Here is your job readiness snapshot</p>
             </div>
@@ -449,7 +450,7 @@ export default function JobReadinessQuiz() {
                   <circle cx={60} cy={60} r={50} fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth={8} />
                   <motion.circle
                     cx={60} cy={60} r={50}
-                    fill="none" stroke="#a855f7" strokeWidth={8}
+                    fill="none" stroke="#00E676" strokeWidth={8}
                     strokeDasharray={2 * Math.PI * 50}
                     initial={{ strokeDashoffset: 2 * Math.PI * 50 }}
                     animate={{ strokeDashoffset: 2 * Math.PI * 50 - (overallPct / 100) * 2 * Math.PI * 50 }}
@@ -457,7 +458,7 @@ export default function JobReadinessQuiz() {
                     strokeLinecap="round"
                   />
                 </svg>
-                <div style={{ position: 'absolute', fontSize: 28, fontWeight: 900, color: '#c084fc' }}>{overallPct}%</div>
+                <div style={{ position: 'absolute', fontSize: 28, fontWeight: 900, color: '#69F0AE' }}>{overallPct}%</div>
               </div>
               <div>
                 <p style={{ fontSize: 12, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 6 }}>Suggested Role</p>
@@ -502,7 +503,7 @@ export default function JobReadinessQuiz() {
                   navigator.clipboard.writeText(window.location.href)
                   alert('Link copied!')
                 }}
-                style={{ background: 'linear-gradient(135deg, #a855f7 0%, #6366f1 100%)' }}
+                style={{ background: 'linear-gradient(135deg, #00E676 0%, #00C853 100%)', color: '#080B12' }}
               >
                 Share Results
               </button>

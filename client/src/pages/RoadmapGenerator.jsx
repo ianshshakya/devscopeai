@@ -12,7 +12,7 @@ const ROLES = [
   'Junior Developer', 'Software Engineer', 'Tech Lead',
 ]
 
-const MONTH_COLORS = ['#6366f1', '#8b5cf6', '#a855f7', '#d946ef', '#ec4899', '#f43f5e', '#f97316', '#f59e0b', '#10b981', '#06b6d4', '#3b82f6', '#6366f1']
+const MONTH_COLORS = ['#00E676', '#8b5cf6', '#a855f7', '#d946ef', '#ec4899', '#f43f5e', '#f97316', '#f59e0b', '#10b981', '#06b6d4', '#3b82f6', '#00E676']
 
 export default function RoadmapGenerator() {
   const [currentRole, setCurrentRole] = useState('')
@@ -51,15 +51,15 @@ export default function RoadmapGenerator() {
         >
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 16px',
-            background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.25)',
+            background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.25)',
             borderRadius: 20, marginBottom: 20,
           }}>
-            <Map size={14} style={{ color: '#818cf8' }} />
-            <span style={{ fontSize: 13, color: '#818cf8', fontWeight: 600 }}>Free • No Login Required</span>
+            <Map size={14} style={{ color: '#69F0AE' }} />
+            <span style={{ fontSize: 13, color: '#69F0AE', fontWeight: 600 }}>Free • No Login Required</span>
           </div>
           <h1 style={{ fontSize: 42, fontWeight: 900, letterSpacing: '-0.03em', marginBottom: 16, lineHeight: 1.1 }}>
             Career Roadmap<br />
-            <span style={{ background: 'linear-gradient(135deg, #6366f1, #a855f7)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            <span style={{ background: 'linear-gradient(135deg, #00E676, #a855f7)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               Generator
             </span>
           </h1>
@@ -95,10 +95,10 @@ export default function RoadmapGenerator() {
 
             <div style={{
               width: 40, height: 40, borderRadius: '50%',
-              background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)',
+              background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.2)',
               display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
             }}>
-              <ArrowRight size={18} style={{ color: '#818cf8' }} />
+              <ArrowRight size={18} style={{ color: '#69F0AE' }} />
             </div>
 
             <div>
@@ -147,7 +147,7 @@ export default function RoadmapGenerator() {
                 display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 32,
               }}>
                 {[
-                  { label: 'From', value: roadmap.currentRole, color: '#6366f1' },
+                  { label: 'From', value: roadmap.currentRole, color: '#00E676' },
                   { label: 'Duration', value: `${roadmap.totalMonths} months`, color: '#10b981' },
                   { label: 'To', value: roadmap.targetRole, color: '#a855f7' },
                 ].map((stat, i) => (
@@ -186,7 +186,7 @@ export default function RoadmapGenerator() {
               <div style={{ position: 'relative' }}>
                 <div style={{
                   position: 'absolute', left: 23, top: 0, bottom: 0, width: 2,
-                  background: 'linear-gradient(to bottom, #6366f1, rgba(99,102,241,0.05))',
+                  background: 'linear-gradient(to bottom, #00E676, rgba(0,230,118,0.05))',
                 }} />
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
@@ -229,8 +229,8 @@ export default function RoadmapGenerator() {
                                 style={{
                                   display: 'flex', alignItems: 'center', gap: 8, fontSize: 12,
                                   padding: '6px 10px', borderRadius: 6, textDecoration: 'none',
-                                  background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.15)',
-                                  color: '#818cf8', transition: 'all 0.15s',
+                                  background: 'rgba(0,230,118,0.06)', border: '1px solid rgba(0,230,118,0.15)',
+                                  color: '#69F0AE', transition: 'all 0.15s',
                                 }}>
                                 <span style={{ color: 'var(--text-secondary)', flex: 1 }}>{r.title}</span>
                                 <span className="badge badge-blue" style={{ fontSize: 10 }}>{r.type}</span>

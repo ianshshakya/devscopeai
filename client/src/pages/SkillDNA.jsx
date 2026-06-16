@@ -6,7 +6,7 @@ import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer } fro
 
 const DIMENSIONS = [
   {
-    key: 'frontend', label: 'Frontend', icon: <Code2 size={18} />, color: '#6366f1',
+    key: 'frontend', label: 'Frontend', icon: <Code2 size={18} />, color: '#3b82f6',
     questions: [
       { q: 'How comfortable are you with React / Vue / Angular?', weight: 3 },
       { q: 'Can you build responsive layouts without a framework?', weight: 2 },
@@ -79,7 +79,7 @@ const ANSWER_OPTIONS = [
 
 const getScoreColor = (score) => {
   if (score >= 80) return '#10b981'
-  if (score >= 60) return '#6366f1'
+  if (score >= 60) return '#00E676'
   if (score >= 40) return '#f59e0b'
   return '#ef4444'
 }
@@ -142,16 +142,16 @@ export default function SkillDNA() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ textAlign: 'center' }}>
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 16px',
-              background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.25)',
+              background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.25)',
               borderRadius: 20, marginBottom: 20,
             }}>
-              <Cpu size={14} style={{ color: '#818cf8' }} />
-              <span style={{ fontSize: 13, color: '#818cf8', fontWeight: 600 }}>28 Questions • ~5 Minutes • Free</span>
+              <Cpu size={14} style={{ color: '#00E676' }} />
+              <span style={{ fontSize: 13, color: '#69F0AE', fontWeight: 600 }}>28 Questions • ~5 Minutes • Free</span>
             </div>
 
             <h1 style={{ fontSize: 48, fontWeight: 900, letterSpacing: '-0.03em', marginBottom: 16, lineHeight: 1.1 }}>
               Discover Your<br />
-              <span style={{ background: 'linear-gradient(135deg, #6366f1, #a855f7, #06b6d4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              <span style={{ background: 'linear-gradient(135deg, #00E676, #a855f7, #06b6d4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                 Tech Skill DNA
               </span>
             </h1>
@@ -189,7 +189,7 @@ export default function SkillDNA() {
                 </span>
                 <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>{Math.round(progress * 100)}% done</span>
               </div>
-              <div style={{ height: 4, background: 'rgba(99,102,241,0.1)', borderRadius: 2, overflow: 'hidden' }}>
+              <div style={{ height: 4, background: 'rgba(0,230,118,0.1)', borderRadius: 2, overflow: 'hidden' }}>
                 <motion.div
                   animate={{ width: `${progress * 100}%` }}
                   transition={{ duration: 0.3 }}
@@ -268,9 +268,9 @@ export default function SkillDNA() {
             <div className="glass-card" style={{ padding: 28, marginBottom: 24 }}>
               <ResponsiveContainer width="100%" height={280}>
                 <RadarChart data={DIMENSIONS.map(d => ({ dimension: d.label, score: scores[d.key] || 0 }))}>
-                  <PolarGrid stroke="rgba(99,102,241,0.15)" />
+                  <PolarGrid stroke="rgba(168,85,247,0.15)" />
                   <PolarAngleAxis dataKey="dimension" tick={{ fill: '#8b9cc8', fontSize: 12 }} />
-                  <Radar name="Score" dataKey="score" stroke="#6366f1" fill="#6366f1" fillOpacity={0.2} strokeWidth={2} />
+                  <Radar name="Score" dataKey="score" stroke="#a855f7" fill="#a855f7" fillOpacity={0.2} strokeWidth={2} />
                 </RadarChart>
               </ResponsiveContainer>
             </div>
@@ -291,7 +291,7 @@ export default function SkillDNA() {
                       <span style={{ color }}>{dim.icon}</span>
                       <span style={{ fontSize: 13, fontWeight: 600 }}>{dim.label}</span>
                     </div>
-                    <div style={{ height: 6, background: 'rgba(99,102,241,0.1)', borderRadius: 3, overflow: 'hidden', marginBottom: 8 }}>
+                    <div style={{ height: 6, background: 'rgba(0,230,118,0.1)', borderRadius: 3, overflow: 'hidden', marginBottom: 8 }}>
                       <motion.div
                         initial={{ width: 0 }} animate={{ width: `${score}%` }}
                         transition={{ duration: 1, ease: 'easeOut', delay: 0.3 }}
