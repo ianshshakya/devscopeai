@@ -22,7 +22,7 @@ export default function Footer() {
   return (
     <footer style={{
       padding: '64px 24px 32px',
-      background: '#050711',
+      background: 'var(--bg-primary)',
       borderTop: '1px dashed rgba(255, 255, 255, 0.08)',
     }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
@@ -31,14 +31,14 @@ export default function Footer() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
               <div style={{
                 width: 28, height: 28, borderRadius: 7,
-                background: 'linear-gradient(135deg, #00E676, #00C853)',
+                background: 'linear-gradient(135deg, var(--text-primary), var(--text-primary))',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 0 12px rgba(0, 230, 118, 0.25)',
+                boxShadow: "none",
               }}>
-                <Zap size={14} fill="#080B12" color="#080B12" />
+                <Zap size={14} fill="var(--bg-primary)" color="var(--bg-primary)" />
               </div>
-              <span style={{ fontWeight: 800, fontSize: 15, letterSpacing: '-0.03em', color: '#f8fafc' }}>
-                DevScope <span style={{ color: '#00E676' }}>AI</span>
+              <span style={{ fontWeight: 800, fontSize: 15, letterSpacing: '-0.03em', color: 'var(--text-primary)' }}>
+                DevScope <span style={{ color: 'var(--text-primary)' }}>AI</span>
               </span>
             </div>
             <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.7, maxWidth: 220 }}>
@@ -50,7 +50,7 @@ export default function Footer() {
             <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 16 }}>Product</p>
             {['Features', 'How It Works', 'Pricing', 'Sample Report'].map((item) => (
               <a key={item} href="#" style={{ display: 'block', fontSize: 13, color: 'var(--text-secondary)', textDecoration: 'none', marginBottom: 10, transition: 'color 0.15s' }}
-                onMouseEnter={(e) => e.target.style.color = '#00E676'}
+                onMouseEnter={(e) => e.target.style.color = 'var(--text-primary)'}
                 onMouseLeave={(e) => e.target.style.color = 'var(--text-secondary)'}
               >{item}</a>
             ))}
@@ -60,7 +60,7 @@ export default function Footer() {
             <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 16 }}>Company</p>
             {['About', 'Blog', 'Careers', 'Contact'].map((item) => (
               <a key={item} href="#" style={{ display: 'block', fontSize: 13, color: 'var(--text-secondary)', textDecoration: 'none', marginBottom: 10, transition: 'color 0.15s' }}
-                onMouseEnter={(e) => e.target.style.color = '#00E676'}
+                onMouseEnter={(e) => e.target.style.color = 'var(--text-primary)'}
                 onMouseLeave={(e) => e.target.style.color = 'var(--text-secondary)'}
               >{item}</a>
             ))}
@@ -70,7 +70,7 @@ export default function Footer() {
             <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 16 }}>Legal</p>
             {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((item) => (
               <a key={item} href="#" style={{ display: 'block', fontSize: 13, color: 'var(--text-secondary)', textDecoration: 'none', marginBottom: 10, transition: 'color 0.15s' }}
-                onMouseEnter={(e) => e.target.style.color = '#00E676'}
+                onMouseEnter={(e) => e.target.style.color = 'var(--text-primary)'}
                 onMouseLeave={(e) => e.target.style.color = 'var(--text-secondary)'}
               >{item}</a>
             ))}
@@ -78,7 +78,7 @@ export default function Footer() {
         </div>
 
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
-          <p className="cyber-mono" style={{ fontSize: 12, color: 'var(--text-muted)' }}>© 2025 DEVSCOPE AI. ALL RIGHTS RESERVED.</p>
+          <p className="mono" style={{ fontSize: 12, color: 'var(--text-muted)' }}>© 2025 DEVSCOPE AI. ALL RIGHTS RESERVED.</p>
           <div style={{ display: 'flex', gap: 10 }}>
             {[GithubIcon, TwitterIcon, LinkedinIcon].map((Icon, i) => (
               <a key={i} href="#" style={{
@@ -89,10 +89,10 @@ export default function Footer() {
                 color: 'var(--text-muted)', textDecoration: 'none', transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
               }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(0, 230, 118, 0.3)';
-                  e.currentTarget.style.color = '#00E676';
-                  e.currentTarget.style.background = 'rgba(0, 230, 118, 0.03)';
-                  e.currentTarget.style.boxShadow = '0 0 10px rgba(0, 230, 118, 0.1)';
+                  e.currentTarget.style.borderColor = 'var(--border)';
+                  e.currentTarget.style.color = 'var(--text-primary)';
+                  e.currentTarget.style.background = 'var(--border)';
+                  e.currentTarget.style.boxShadow = '0 0 10px var(--border)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)';

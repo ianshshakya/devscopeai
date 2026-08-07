@@ -49,7 +49,7 @@ const ScoreRing = ({ score }) => {
   return (
     <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
       <svg width={130} height={130} style={{ transform: 'rotate(-90deg)' }}>
-        <circle cx={65} cy={65} r={radius} fill="none" stroke="rgba(0,230,118,0.08)" strokeWidth={stroke} />
+        <circle cx={65} cy={65} r={radius} fill="none" stroke="var(--border)" strokeWidth={stroke} />
         <motion.circle
           cx={65} cy={65} r={radius}
           fill="none" stroke={color} strokeWidth={stroke}
@@ -106,14 +106,15 @@ export default function PublicScanner() {
         const data = await res.json().catch(() => ({}))
         throw new Error(data.error || 'User not found or scan failed')
       }
-      const data = await res.json()
-      setScanData(data)
+      const data = await res.json();
+      setScanData(data);
       // Update URL without reloading the page
-      const newUrl = `${window.location.origin}${window.location.pathname}?u=${trimmed}`
-      window.history.pushState({ path: newUrl }, '', newUrl)
+      const newUrl = `${window.location.origin}${window.location.pathname}?u=${trimmed}`;
+      window.history.pushState({ path: newUrl }, '', newUrl);
     } catch (err) {
-      setError(err.message)
-      toast.error(err.message)
+      
+      setError(err.message);
+      toast.error(err.message);
     } finally {
       setLoading(false)
     }
@@ -178,7 +179,7 @@ export default function PublicScanner() {
       {/* ── Ambient background glows ────────────────────────────── */}
       <div style={{
         position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0,
-        background: 'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,230,118,0.1) 0%, transparent 70%)',
+        background: 'radial-gradient(ellipse 80% 60% at 50% -10%, var(--border) 0%, transparent 70%)',
       }} />
 
       <main style={{ position: 'relative', zIndex: 1, maxWidth: 880, margin: '0 auto', padding: '100px 24px 80px' }}>
@@ -192,7 +193,7 @@ export default function PublicScanner() {
         >
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 16px',
-            background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.25)',
+            background: 'var(--border)', border: '1px solid var(--border)',
             borderRadius: 20, marginBottom: 20,
           }}>
             <Award size={14} style={{ color: '#69F0AE' }} />
@@ -256,9 +257,9 @@ export default function PublicScanner() {
                 whileTap={{ scale: 0.98 }}
                 style={{
                   padding: '14px 28px', borderRadius: 10, border: 'none', cursor: 'pointer',
-                  background: 'linear-gradient(135deg, #00E676 0%, #00C853 100%)',
-                  color: '#080B12', fontWeight: 700, fontSize: 15, display: 'flex', alignItems: 'center', gap: 8,
-                  boxShadow: '0 4px 20px rgba(0,230,118,0.3)',
+                  background: 'linear-gradient(135deg, var(--text-primary) 0%, var(--text-primary) 100%)',
+                  color: 'var(--bg-primary)', fontWeight: 700, fontSize: 15, display: 'flex', alignItems: 'center', gap: 8,
+                  boxShadow: "none",
                   transition: 'all 0.2s',
                 }}
               >
@@ -321,7 +322,7 @@ export default function PublicScanner() {
                   <img
                     src={profile?.avatarUrl}
                     alt={profile?.name || username}
-                    style={{ width: 80, height: 80, borderRadius: '50%', border: '2px solid rgba(0,230,118,0.3)' }}
+                    style={{ width: 80, height: 80, borderRadius: '50%', border: '2px solid var(--border)' }}
                   />
                   <div style={{ flex: 1 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 6 }}>
@@ -459,7 +460,7 @@ export default function PublicScanner() {
                               style={{
                                 fontSize: 10,
                                 background: `${LANG_COLORS[repo.language] || '#64748b'}15`,
-                                color: LANG_COLORS[repo.language] || '#94a3b8',
+                                color: LANG_COLORS[repo.language] || 'var(--text-secondary)',
                                 border: `1px solid ${LANG_COLORS[repo.language] || '#64748b'}25`,
                               }}
                             >
@@ -480,13 +481,13 @@ export default function PublicScanner() {
                   onClick={handleShare}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 8, padding: '12px 24px',
-                    borderRadius: 12, border: '1px solid rgba(0,230,118,0.4)',
-                    background: 'rgba(0,230,118,0.08)', color: '#69F0AE',
+                    borderRadius: 12, border: '1px solid var(--border)',
+                    background: 'var(--border)', color: '#69F0AE',
                     cursor: 'pointer', fontWeight: 600, fontSize: 14,
                     transition: 'all 0.2s',
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,230,118,0.15)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
-                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(0,230,118,0.08)'; e.currentTarget.style.transform = 'translateY(0)' }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'var(--border)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'var(--border)'; e.currentTarget.style.transform = 'translateY(0)' }}
                 >
                   <Share2 size={15} /> Copy Shareable Link
                 </button>

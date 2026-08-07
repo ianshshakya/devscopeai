@@ -47,26 +47,26 @@ export default function Navbar() {
         alignItems: 'center',
         justifyContent: 'space-between',
         transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-        background: scrolled ? 'rgba(11, 17, 30, 0.75)' : 'rgba(8, 11, 18, 0.15)',
+        background: scrolled ? 'var(--bg-secondary)' : 'var(--bg-secondary)',
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
-        border: scrolled ? '1px solid rgba(0, 230, 118, 0.2)' : '1px solid rgba(255,255,255,0.03)',
+        border: scrolled ? '1px solid var(--border)' : '1px solid rgba(255,255,255,0.03)',
         borderRadius: scrolled ? 16 : 0,
-        boxShadow: scrolled ? '0 10px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 230, 118, 0.05)' : 'none',
+        boxShadow: scrolled ? '0 10px 40px rgba(0, 0, 0, 0.4), 0 0 30px var(--border)' : 'none',
       }}
     >
       {/* Logo */}
       <Link to={user ? '/dashboard' : '/'} style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
         <div style={{
           width: 30, height: 30, borderRadius: 8,
-          background: 'linear-gradient(135deg, #00E676, #00C853)',
+          background: 'linear-gradient(135deg, var(--text-primary), var(--text-primary))',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: '0 0 12px rgba(0, 230, 118, 0.25)',
+          boxShadow: "none",
         }}>
-          <Zap size={14} fill="#080B12" color="#080B12" />
+          <Zap size={14} fill="var(--bg-primary)" color="var(--bg-primary)" />
         </div>
         <span style={{ fontWeight: 800, fontSize: 16, color: 'var(--text-primary)', letterSpacing: '-0.03em' }}>
-          DevScope <span style={{ color: '#00E676' }}>AI</span>
+          DevScope <span style={{ color: 'var(--text-primary)' }}>AI</span>
         </span>
       </Link>
 
@@ -83,8 +83,8 @@ export default function Navbar() {
                 letterSpacing: '-0.01em',
               }}
               onMouseEnter={(e) => {
-                e.target.style.color = '#00E676';
-                e.target.style.textShadow = '0 0 8px rgba(0,230,118,0.4)';
+                e.target.style.color = 'var(--text-primary)';
+                e.target.style.textShadow = '0 0 8px var(--border)';
               }}
               onMouseLeave={(e) => {
                 e.target.style.color = 'var(--text-secondary)';
@@ -111,9 +111,9 @@ export default function Navbar() {
               to={link.to}
               style={{
                 padding: '6px 12px', borderRadius: 6, fontSize: 13, fontWeight: 500,
-                color: location.pathname === link.to ? '#00E676' : 'var(--text-secondary)',
+                color: location.pathname === link.to ? 'var(--text-primary)' : 'var(--text-secondary)',
                 textDecoration: 'none',
-                background: location.pathname === link.to ? 'rgba(0,230,118,0.08)' : 'transparent',
+                background: location.pathname === link.to ? 'var(--border)' : 'transparent',
                 transition: 'all 0.15s',
               }}
             >
@@ -150,7 +150,7 @@ export default function Navbar() {
             style={{ padding: '8px 16px', fontSize: 13 }}
             id="nav-cta"
           >
-            <GithubIcon size={14} color="#080B12" /> Connect GitHub
+            <GithubIcon size={14} color="var(--bg-primary)" /> Connect GitHub
           </button>
         )}
 

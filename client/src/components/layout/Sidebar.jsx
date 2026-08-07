@@ -31,14 +31,14 @@ export default function Sidebar() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{
             width: 32, height: 32, borderRadius: 8,
-            background: 'linear-gradient(135deg, #00E676 0%, #00C853 100%)',
+            background: 'linear-gradient(135deg, var(--text-primary) 0%, var(--text-primary) 100%)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 0 16px rgba(0, 230, 118, 0.25)',
+            boxShadow: "none",
           }}>
-            <Zap size={16} fill="#080B12" color="#080B12" />
+            <Zap size={16} fill="var(--bg-primary)" color="var(--bg-primary)" />
           </div>
           <span style={{ fontWeight: 800, fontSize: 16, letterSpacing: '-0.03em', color: 'var(--text-primary)' }}>
-            DevScope <span style={{ color: '#00E676' }}>AI</span>
+            DevScope <span style={{ color: 'var(--text-primary)' }}>AI</span>
           </span>
         </div>
       </div>
@@ -62,8 +62,8 @@ export default function Sidebar() {
       {user?.plan === 'free' && (
         <div style={{
           margin: '0 12px 12px', padding: '16px',
-          background: 'linear-gradient(135deg, rgba(0,230,118,0.06), rgba(59,130,246,0.04))',
-          border: '1px solid rgba(0,230,118,0.15)', borderRadius: 10,
+          background: 'linear-gradient(135deg, var(--border), rgba(59,130,246,0.04))',
+          border: '1px solid var(--border)', borderRadius: 10,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
             <Crown size={14} color="#f59e0b" />

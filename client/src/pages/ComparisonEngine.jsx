@@ -88,7 +88,7 @@ export default function ComparisonEngine() {
                     const diff = overall - avg
                     return diff >= 0 ? `+${diff} above average` : `${diff} below average`
                   })(),
-                  color: '#00E676',
+                  color: 'var(--text-primary)',
                 },
                 {
                   icon: <Users size={20} />,
@@ -158,11 +158,11 @@ export default function ComparisonEngine() {
                       </div>
 
                       {/* Dual bar */}
-                      <div style={{ position: 'relative', height: 10, background: 'rgba(0,230,118,0.08)', borderRadius: 5, overflow: 'hidden' }}>
+                      <div style={{ position: 'relative', height: 10, background: 'var(--border)', borderRadius: 5, overflow: 'hidden' }}>
                         {/* Platform average */}
                         <div style={{
                           position: 'absolute', left: 0, top: 0, height: '100%',
-                          width: `${platformAvg}%`, background: 'rgba(0,230,118,0.2)', borderRadius: 5,
+                          width: `${platformAvg}%`, background: 'var(--border)', borderRadius: 5,
                         }} />
                         {/* User score */}
                         <motion.div
@@ -184,11 +184,11 @@ export default function ComparisonEngine() {
               {/* Legend */}
               <div style={{ display: 'flex', gap: 20, marginTop: 24, paddingTop: 20, borderTop: '1px solid var(--border)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--text-muted)' }}>
-                  <div style={{ width: 20, height: 6, background: '#00E676', borderRadius: 3 }} />
+                  <div style={{ width: 20, height: 6, background: 'var(--text-primary)', borderRadius: 3 }} />
                   Your Score
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--text-muted)' }}>
-                  <div style={{ width: 20, height: 6, background: 'rgba(0,230,118,0.3)', borderRadius: 3 }} />
+                  <div style={{ width: 20, height: 6, background: 'var(--border)', borderRadius: 3 }} />
                   Platform Average
                 </div>
               </div>

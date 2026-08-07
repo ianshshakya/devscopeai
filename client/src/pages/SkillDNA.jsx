@@ -79,7 +79,7 @@ const ANSWER_OPTIONS = [
 
 const getScoreColor = (score) => {
   if (score >= 80) return '#10b981'
-  if (score >= 60) return '#00E676'
+  if (score >= 60) return 'var(--text-primary)'
   if (score >= 40) return '#f59e0b'
   return '#ef4444'
 }
@@ -142,16 +142,16 @@ export default function SkillDNA() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ textAlign: 'center' }}>
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 16px',
-              background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.25)',
+              background: 'var(--border)', border: '1px solid var(--border)',
               borderRadius: 20, marginBottom: 20,
             }}>
-              <Cpu size={14} style={{ color: '#00E676' }} />
+              <Cpu size={14} style={{ color: 'var(--text-primary)' }} />
               <span style={{ fontSize: 13, color: '#69F0AE', fontWeight: 600 }}>28 Questions • ~5 Minutes • Free</span>
             </div>
 
             <h1 style={{ fontSize: 48, fontWeight: 900, letterSpacing: '-0.03em', marginBottom: 16, lineHeight: 1.1 }}>
               Discover Your<br />
-              <span style={{ background: 'linear-gradient(135deg, #00E676, #a855f7, #06b6d4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              <span style={{ background: 'linear-gradient(135deg, var(--text-primary), #a855f7, #06b6d4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                 Tech Skill DNA
               </span>
             </h1>
@@ -189,7 +189,7 @@ export default function SkillDNA() {
                 </span>
                 <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>{Math.round(progress * 100)}% done</span>
               </div>
-              <div style={{ height: 4, background: 'rgba(0,230,118,0.1)', borderRadius: 2, overflow: 'hidden' }}>
+              <div style={{ height: 4, background: 'var(--border)', borderRadius: 2, overflow: 'hidden' }}>
                 <motion.div
                   animate={{ width: `${progress * 100}%` }}
                   transition={{ duration: 0.3 }}
@@ -291,7 +291,7 @@ export default function SkillDNA() {
                       <span style={{ color }}>{dim.icon}</span>
                       <span style={{ fontSize: 13, fontWeight: 600 }}>{dim.label}</span>
                     </div>
-                    <div style={{ height: 6, background: 'rgba(0,230,118,0.1)', borderRadius: 3, overflow: 'hidden', marginBottom: 8 }}>
+                    <div style={{ height: 6, background: 'var(--border)', borderRadius: 3, overflow: 'hidden', marginBottom: 8 }}>
                       <motion.div
                         initial={{ width: 0 }} animate={{ width: `${score}%` }}
                         transition={{ duration: 1, ease: 'easeOut', delay: 0.3 }}

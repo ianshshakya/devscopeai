@@ -82,7 +82,7 @@ const GlassCard = ({
     transition={{
       delay,
     }}
-    className={`cyber-card cyber-card-hover scanline-container grid-pattern ${className}`}
+    className={`minimal-card minimal-card-hover scanline-container grid-pattern ${className}`}
     style={{
       padding: "22px",
       ...style,
@@ -141,7 +141,7 @@ const ScoreRing = ({
           cy={size / 2}
           r={radius + 12}
           fill="none"
-          stroke="rgba(0, 230, 118, 0.15)"
+          stroke="var(--border)"
           strokeWidth={1}
           strokeDasharray="4 6"
           animate={{ rotate: 360 }}
@@ -207,7 +207,7 @@ const ScoreRing = ({
         }}
       >
         <div
-          className="metric-value cyber-mono"
+          className="metric-value mono"
           style={{
             fontSize: 34,
             fontWeight: 800,
@@ -274,7 +274,7 @@ const SkillPillar = ({
       </div>
 
       <span
-        className="cyber-mono"
+        className="mono"
         style={{
           fontSize: 13,
           color: getScoreColor(score),
@@ -327,13 +327,13 @@ const Insight = ({
   type = "success",
 }) => {
   const colors = {
-    success: "#00E676",
+    success: "var(--text-primary)",
     warning: "#F59E0B",
     info: "#3B82F6",
   };
 
   const glows = {
-    success: "rgba(0, 230, 118, 0.04)",
+    success: "var(--border)",
     warning: "rgba(245, 158, 11, 0.04)",
     info: "rgba(59, 130, 246, 0.04)",
   };
@@ -461,7 +461,7 @@ export default function Dashboard() {
         background: `
           radial-gradient(
             circle at top right,
-            rgba(0, 230, 118, 0.1),
+            var(--border),
             transparent 40%
           ),
           radial-gradient(
@@ -507,7 +507,7 @@ export default function Dashboard() {
                 <span className="status-dot status-dot-green" style={{ marginRight: 6, display: 'inline-block' }} />
                 DevScope Engine v2.4
               </span>
-              <span className="cyber-mono" style={{ fontSize: 10, color: 'var(--text-muted)' }}>SYSTEM_STATE // SECURE_ACTIVE</span>
+              <span className="mono" style={{ fontSize: 10, color: 'var(--text-muted)' }}>SYSTEM_STATE // SECURE_ACTIVE</span>
             </div>
 
             <h1
@@ -536,11 +536,11 @@ export default function Dashboard() {
           </div>
 
           <div
-            className="cyber-mono"
+            className="mono"
             style={{
               padding: "10px 18px",
               background: "rgba(255, 255, 255, 0.01)",
-              border: "1px solid rgba(255, 255, 255, 0.04)",
+              border: "1px solid var(--border)",
               borderRadius: 12,
               fontSize: 11,
               color: "var(--text-muted)",
@@ -590,7 +590,7 @@ export default function Dashboard() {
                     fontWeight: 700,
                   }}
                 >
-                  <Rocket size={14} className="text-glow-green" />
+                  <Rocket size={14} className="" />
                   <span>Hiring Intelligence Command</span>
                 </div>
 
@@ -598,7 +598,7 @@ export default function Dashboard() {
                   style={{
                     fontSize: 28,
                     fontWeight: 800,
-                    color: "#F8FAFC",
+                    color: "var(--text-primary)",
                     marginBottom: 8,
                     letterSpacing: "-0.02em",
                   }}
@@ -649,7 +649,7 @@ export default function Dashboard() {
                 <ScoreRing score={overallScore} />
 
                 <p
-                  className="cyber-mono"
+                  className="mono"
                   style={{
                     marginTop: 14,
                     fontWeight: 800,
@@ -664,7 +664,7 @@ export default function Dashboard() {
                 </p>
 
                 <span
-                  className="cyber-mono"
+                  className="mono"
                   style={{
                     color: "var(--text-muted)",
                     fontSize: 11,
@@ -689,12 +689,12 @@ export default function Dashboard() {
             >
               <Sparkles
                 size={15}
-                color="#00E676"
+                color="var(--text-primary)"
                 style={{ filter: "drop-shadow(0 0 4px var(--accent))" }}
               />
               <h3
                 style={{
-                  color: "#F8FAFC",
+                  color: "var(--text-primary)",
                   fontSize: 14,
                   textTransform: "uppercase",
                   letterSpacing: "0.08em",
@@ -730,10 +730,10 @@ export default function Dashboard() {
               }}
             >
               <div
-                className="cyber-mono"
+                className="mono"
                 style={{
                   fontSize: 10,
-                  color: "#00E676",
+                  color: "var(--text-primary)",
                   fontWeight: 700,
                   letterSpacing: "0.1em",
                 }}
@@ -743,13 +743,13 @@ export default function Dashboard() {
 
               <p
                 style={{
-                  color: "#F8FAFC",
+                  color: "var(--text-primary)",
                   marginTop: 6,
                   fontSize: 13,
                   lineHeight: 1.5,
                 }}
               >
-                Improve your testing score by <strong style={{ color: "#00E676" }}>15%</strong> to unlock Senior Engineer readiness.
+                Improve your testing score by <strong style={{ color: "var(--text-primary)" }}>15%</strong> to unlock Senior Engineer readiness.
               </p>
             </div>
           </GlassCard>
@@ -783,7 +783,7 @@ export default function Dashboard() {
                   textTransform: "uppercase",
                   letterSpacing: "0.08em",
                   fontWeight: 700,
-                  color: "#F8FAFC",
+                  color: "var(--text-primary)",
                 }}
               >
                 Engineering Pillars
@@ -827,7 +827,7 @@ export default function Dashboard() {
               }}
             >
               <p
-                className="cyber-mono"
+                className="mono"
                 style={{
                   fontSize: 11,
                   color: "#60A5FA",
@@ -839,9 +839,9 @@ export default function Dashboard() {
               </p>
 
               <h4
-                className="cyber-mono"
+                className="mono"
                 style={{
-                  color: "#F8FAFC",
+                  color: "var(--text-primary)",
                   fontSize: 14,
                   fontWeight: 700,
                   textTransform: "uppercase",
@@ -869,7 +869,7 @@ export default function Dashboard() {
               <TrendingUp size={16} color="var(--accent)" />
               <h3
                 style={{
-                  color: "#F8FAFC",
+                  color: "var(--text-primary)",
                   fontSize: 14,
                   textTransform: "uppercase",
                   letterSpacing: "0.08em",
@@ -895,7 +895,7 @@ export default function Dashboard() {
                   top: 8,
                   bottom: 24,
                   width: 2,
-                  background: "linear-gradient(180deg, #00E676 40%, rgba(255,255,255,0.06) 80%)",
+                  background: "linear-gradient(180deg, var(--text-primary) 40%, rgba(255,255,255,0.06) 80%)",
                   zIndex: 0,
                 }}
               />
@@ -931,8 +931,8 @@ export default function Dashboard() {
                               width: 8,
                               height: 8,
                               borderRadius: "50%",
-                              background: "#00E676",
-                              boxShadow: "0 0 10px #00E676",
+                              background: "var(--text-primary)",
+                              boxShadow: "none",
                               position: "relative",
                               zIndex: 3,
                             }}
@@ -954,7 +954,7 @@ export default function Dashboard() {
                     <div>
                       <h4
                         style={{
-                          color: active ? "#F8FAFC" : "var(--text-secondary)",
+                          color: active ? "var(--text-primary)" : "var(--text-secondary)",
                           fontSize: 14,
                           fontWeight: 600,
                         }}
@@ -1002,7 +1002,7 @@ export default function Dashboard() {
           <GlassCard>
             <h3
               style={{
-                color: "#F8FAFC",
+                color: "var(--text-primary)",
                 marginBottom: 18,
                 fontSize: 14,
                 textTransform: "uppercase",
@@ -1019,19 +1019,19 @@ export default function Dashboard() {
                 <PolarAngleAxis
                   dataKey="dimension"
                   tick={{
-                    fill: "#94A3B8",
+                    fill: "var(--text-secondary)",
                     fontSize: 11,
                     fontFamily: "monospace",
                   }}
                 />
                 <Radar
                   dataKey="score"
-                  stroke="#00E676"
-                  fill="#00E676"
+                  stroke="var(--text-primary)"
+                  fill="var(--text-primary)"
                   fillOpacity={0.08}
                   strokeWidth={2}
                   style={{
-                    filter: "drop-shadow(0 0 8px rgba(0,230,118,0.25))",
+                    filter: "drop-shadow(0 0 8px var(--border))",
                   }}
                 />
               </RadarChart>
@@ -1042,7 +1042,7 @@ export default function Dashboard() {
           <GlassCard>
             <h3
               style={{
-                color: "#F8FAFC",
+                color: "var(--text-primary)",
                 marginBottom: 18,
                 fontSize: 14,
                 textTransform: "uppercase",
@@ -1057,15 +1057,15 @@ export default function Dashboard() {
               <AreaChart data={timelineData}>
                 <defs>
                   <linearGradient id="scoreFill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#00E676" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#00E676" stopOpacity={0} />
+                    <stop offset="5%" stopColor="var(--text-primary)" stopOpacity={0.25} />
+                    <stop offset="95%" stopColor="var(--text-primary)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid stroke="rgba(255,255,255,0.03)" strokeDasharray="3 3" vertical={false} />
                 <XAxis
                   dataKey="name"
                   tick={{
-                    fill: "#94A3B8",
+                    fill: "var(--text-secondary)",
                     fontSize: 11,
                     fontFamily: "monospace",
                   }}
@@ -1075,7 +1075,7 @@ export default function Dashboard() {
                 <YAxis
                   domain={[0, 100]}
                   tick={{
-                    fill: "#94A3B8",
+                    fill: "var(--text-secondary)",
                     fontSize: 11,
                     fontFamily: "monospace",
                   }}
@@ -1086,10 +1086,10 @@ export default function Dashboard() {
                   contentStyle={{
                     background: "rgba(10, 15, 30, 0.9)",
                     backdropFilter: "blur(8px)",
-                    border: "1px solid rgba(0, 230, 118, 0.2)",
+                    border: "1px solid var(--border)",
                     borderRadius: 12,
-                    color: "#F8FAFC",
-                    boxShadow: "0 10px 25px rgba(0,0,0,0.5)",
+                    color: "var(--text-primary)",
+                    boxShadow: "none",
                     fontFamily: "'JetBrains Mono', monospace",
                     fontSize: 12,
                   }}
@@ -1097,11 +1097,11 @@ export default function Dashboard() {
                 <Area
                   type="monotone"
                   dataKey="score"
-                  stroke="#00E676"
+                  stroke="var(--text-primary)"
                   strokeWidth={2.5}
                   fill="url(#scoreFill)"
                   dot={{
-                    fill: "#00E676",
+                    fill: "var(--text-primary)",
                     r: 4,
                     strokeWidth: 0,
                   }}
@@ -1128,7 +1128,7 @@ export default function Dashboard() {
             <div>
               <h3
                 style={{
-                  color: "#F8FAFC",
+                  color: "var(--text-primary)",
                   fontSize: 16,
                   textTransform: "uppercase",
                   letterSpacing: "0.08em",
@@ -1165,7 +1165,7 @@ export default function Dashboard() {
                     height: 80,
                     borderRadius: 16,
                     background: "rgba(255,255,255,0.02)",
-                    border: "1px solid rgba(255,255,255,0.04)",
+                    border: "1px solid var(--border)",
                     animation: "shimmer 1.5s infinite",
                   }}
                 />
@@ -1180,12 +1180,12 @@ export default function Dashboard() {
                   height: 64,
                   margin: "0 auto",
                   borderRadius: 16,
-                  background: "rgba(0,230,118,0.05)",
-                  border: "1px solid rgba(0,230,118,0.12)",
+                  background: "var(--border)",
+                  border: "1px solid var(--border)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  boxShadow: "0 0 20px rgba(0, 230, 118, 0.05)",
+                  boxShadow: "none",
                 }}
               >
                 <GitBranch size={28} color="var(--accent)" />
@@ -1194,7 +1194,7 @@ export default function Dashboard() {
               <h3
                 style={{
                   marginTop: 20,
-                  color: "#F8FAFC",
+                  color: "var(--text-primary)",
                   fontSize: 18,
                   fontWeight: 700,
                 }}
@@ -1246,13 +1246,13 @@ export default function Dashboard() {
                       padding: "16px 20px",
                       borderRadius: 14,
                       textDecoration: "none",
-                      border: "1px solid rgba(255,255,255,0.04)",
+                      border: "1px solid var(--border)",
                       background: "rgba(255,255,255,0.01)",
                       transition: "all .25s cubic-bezier(0.16, 1, 0.3, 1)",
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.transform = "translateY(-2px)";
-                      e.currentTarget.style.borderColor = "rgba(0,230,118,0.25)";
+                      e.currentTarget.style.borderColor = "var(--border)";
                       e.currentTarget.style.background = "rgba(255,255,255,0.03)";
                       e.currentTarget.style.boxShadow = "0 8px 25px rgba(0,0,0,0.3)";
                     }}
@@ -1270,31 +1270,31 @@ export default function Dashboard() {
                           width: 40,
                           height: 40,
                           borderRadius: 10,
-                          background: "rgba(0,230,118,0.05)",
-                          border: "1px solid rgba(0,230,118,0.12)",
+                          background: "var(--border)",
+                          border: "1px solid var(--border)",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          boxShadow: "0 0 12px rgba(0, 230, 118, 0.05)",
+                          boxShadow: "none",
                         }}
                       >
                         <GitBranch size={16} color="var(--accent)" />
                       </div>
 
                       <div>
-                        <h4 style={{ color: "#F8FAFC", fontWeight: 700, fontSize: 15 }}>
+                        <h4 style={{ color: "var(--text-primary)", fontWeight: 700, fontSize: 15 }}>
                           {repo.repoName}
                         </h4>
 
                         <div style={{ display: "flex", gap: 10, marginTop: 4, alignItems: "center" }}>
                           <Clock size={11} color="var(--text-muted)" />
-                          <span className="cyber-mono" style={{ color: "var(--text-muted)", fontSize: 11 }}>
+                          <span className="mono" style={{ color: "var(--text-muted)", fontSize: 11 }}>
                             {timeAgo(repo.createdAt)}
                           </span>
 
                           {repo.language && (
                             <span
-                              className="cyber-mono"
+                              className="mono"
                               style={{
                                 padding: "2px 8px",
                                 borderRadius: 4,
@@ -1315,7 +1315,7 @@ export default function Dashboard() {
                     <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
                       <div style={{ textAlign: "right" }}>
                         <div
-                          className="cyber-mono"
+                          className="mono"
                           style={{
                             fontSize: 22,
                             fontWeight: 800,

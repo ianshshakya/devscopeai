@@ -97,7 +97,7 @@ const CategoryCard = ({ category, scores, aiReview }) => {
                       <ul style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                         {explanation.suggestions.map((s, i) => (
                           <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: 'var(--text-secondary)' }}>
-                            <span style={{ color: '#00E676', marginTop: 1, flexShrink: 0 }}>→</span>
+                            <span style={{ color: 'var(--text-primary)', marginTop: 1, flexShrink: 0 }}>→</span>
                             {s}
                           </li>
                         ))}
@@ -150,8 +150,8 @@ const AnalysisLoader = ({ status }) => {
       <div style={{ textAlign: 'center', marginBottom: 32 }}>
         <div style={{
           width: 48, height: 48, margin: '0 auto 16px',
-          border: '3px solid rgba(0,230,118,0.15)',
-          borderTopColor: '#00E676', borderRadius: '50%',
+          border: '3px solid var(--border)',
+          borderTopColor: 'var(--text-primary)', borderRadius: '50%',
           animation: 'spin 0.8s linear infinite',
         }} />
         <p style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>Analyzing Repository</p>
@@ -174,11 +174,11 @@ const AnalysisLoader = ({ status }) => {
             }}
           >
             {i < currentStep ? (
-              <CheckCircle2 size={14} style={{ color: '#00E676', flexShrink: 0 }} />
+              <CheckCircle2 size={14} style={{ color: 'var(--text-primary)', flexShrink: 0 }} />
             ) : i === currentStep ? (
               <div style={{
                 width: 14, height: 14, borderRadius: '50%',
-                border: '2px solid #00E676', borderTopColor: 'transparent',
+                border: '2px solid var(--text-primary)', borderTopColor: 'transparent',
                 animation: 'spin 0.8s linear infinite', flexShrink: 0,
               }} />
             ) : (
@@ -275,14 +275,14 @@ export default function AnalysisPage() {
                   initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
                   style={{
                     padding: '12px 16px', cursor: 'pointer',
-                    border: selectedRepo?.id === repo.id ? '1px solid rgba(0,230,118,0.4)' : '1px solid var(--border)',
-                    background: selectedRepo?.id === repo.id ? 'rgba(0,230,118,0.04)' : 'var(--bg-card)',
+                    border: selectedRepo?.id === repo.id ? '1px solid var(--border)' : '1px solid var(--border)',
+                    background: selectedRepo?.id === repo.id ? 'var(--border)' : 'var(--bg-card)',
                   }}
                   onClick={() => setSelectedRepo(repo)}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <GitBranch size={16} style={{ color: '#00E676', flexShrink: 0 }} />
+                      <GitBranch size={16} style={{ color: 'var(--text-primary)', flexShrink: 0 }} />
                       <div>
                         <p style={{ fontWeight: 600, fontSize: 14, color: 'var(--text-primary)' }}>{repo.name}</p>
                         {repo.description && (
@@ -315,9 +315,9 @@ export default function AnalysisPage() {
               style={{
                 position: 'fixed', bottom: 24, right: 32, left: 272,
                 background: 'rgba(8,11,18,0.95)', backdropFilter: 'blur(20px)',
-                border: '1px solid rgba(0,230,118,0.25)', borderRadius: 12,
+                border: '1px solid var(--border)', borderRadius: 12,
                 padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                boxShadow: '0 8px 32px rgba(0,0,0,0.4), 0 0 20px rgba(0,230,118,0.08)',
+                boxShadow: "none",
               }}
             >
               <div>
@@ -331,7 +331,7 @@ export default function AnalysisPage() {
                 style={{ padding: '10px 20px', fontSize: 14 }}
               >
                 {startMutation.isPending ? (
-                  <><span style={{ width: 16, height: 16, border: '2px solid rgba(8,11,18,0.3)', borderTopColor: '#080B12', borderRadius: '50%', animation: 'spin 0.7s linear infinite', display: 'inline-block' }} /> Analyzing...</>
+                  <><span style={{ width: 16, height: 16, border: '2px solid rgba(8,11,18,0.3)', borderTopColor: 'var(--bg-primary)', borderRadius: '50%', animation: 'spin 0.7s linear infinite', display: 'inline-block' }} /> Analyzing...</>
                 ) : (
                   <><Zap size={16} /> Analyze Now</>
                 )}
@@ -369,8 +369,8 @@ export default function AnalysisPage() {
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
                 <div style={{
                   width: 40, height: 40, borderRadius: 10,
-                  background: 'rgba(0,230,118,0.06)', border: '1px solid rgba(0,230,118,0.15)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#00E676',
+                  background: 'var(--border)', border: '1px solid var(--border)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-primary)',
                 }}>
                   <GitBranch size={20} />
                 </div>
@@ -434,12 +434,12 @@ export default function AnalysisPage() {
                     {/* Strengths & Weaknesses */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
                       <div>
-                        <p style={{ fontSize: 11, fontWeight: 600, color: '#00E676', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>
+                        <p style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>
                           ✓ Strengths
                         </p>
                         {(analysis.aiReview?.strengths || []).slice(0, 4).map((s, i) => (
                           <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 6, marginBottom: 7 }}>
-                            <CheckCircle2 size={13} style={{ color: '#00E676', marginTop: 2, flexShrink: 0 }} />
+                            <CheckCircle2 size={13} style={{ color: 'var(--text-primary)', marginTop: 2, flexShrink: 0 }} />
                             <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.5 }}>{s}</p>
                           </div>
                         ))}
@@ -489,7 +489,7 @@ export default function AnalysisPage() {
                     <ul style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                       {(analysis.aiReview?.suggestedProjects || []).map((p, i) => (
                         <li key={i} style={{ fontSize: 13, color: 'var(--text-secondary)', display: 'flex', gap: 6 }}>
-                          <span style={{ color: '#00E676' }}>→</span> {p}
+                          <span style={{ color: 'var(--text-primary)' }}>→</span> {p}
                         </li>
                       ))}
                     </ul>

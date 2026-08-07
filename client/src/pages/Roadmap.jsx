@@ -14,7 +14,7 @@ const RESOURCE_ICONS = {
 }
 
 const RESOURCE_COLORS = {
-  course: '#00E676',
+  course: 'var(--text-primary)',
   article: '#06b6d4',
   project: '#10b981',
   book: '#f59e0b',
@@ -112,7 +112,7 @@ export default function Roadmap() {
                 {/* Timeline line */}
                 <div style={{
                   position: 'absolute', left: 19, top: 0, bottom: 0, width: 2,
-                  background: 'linear-gradient(to bottom, #00E676, rgba(0,230,118,0.1))',
+                  background: 'linear-gradient(to bottom, var(--text-primary), var(--border))',
                 }} />
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
@@ -127,8 +127,8 @@ export default function Roadmap() {
                       <div style={{
                         position: 'absolute', left: 0, top: 12,
                         width: 40, height: 40, borderRadius: '50%',
-                        background: milestone.completed ? '#10b981' : 'rgba(0,230,118,0.15)',
-                        border: `2px solid ${milestone.completed ? '#10b981' : 'rgba(0,230,118,0.4)'}`,
+                        background: milestone.completed ? '#10b981' : 'var(--border)',
+                        border: `2px solid ${milestone.completed ? '#10b981' : 'var(--border)'}`,
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         color: milestone.completed ? 'white' : '#69F0AE', fontWeight: 700, fontSize: 13,
                       }}>
@@ -169,8 +169,8 @@ export default function Roadmap() {
                                   style={{
                                     display: 'flex', alignItems: 'center', gap: 8,
                                     padding: '6px 10px', borderRadius: 6,
-                                    background: `${RESOURCE_COLORS[res.type] || '#00E676'}10`,
-                                    border: `1px solid ${RESOURCE_COLORS[res.type] || '#00E676'}25`,
+                                    background: `${RESOURCE_COLORS[res.type] || 'var(--text-primary)'}10`,
+                                    border: `1px solid ${RESOURCE_COLORS[res.type] || 'var(--text-primary)'}25`,
                                     color: RESOURCE_COLORS[res.type] || '#69F0AE',
                                     textDecoration: 'none', fontSize: 13, fontWeight: 500,
                                     transition: 'all 0.15s',
