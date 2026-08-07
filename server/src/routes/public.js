@@ -15,7 +15,7 @@ const publicLimiter = rateLimit({
 });
 
 // ─── GET /api/public/scan/:username ───────────────────────────
-router.get('/scan/:username', publicLimiter, async (req, res, next) => {
+router.get('/scan/:username', async (req, res, next) => {
   try {
     const { username } = req.params;
     if (!username || username.length > 39) {
@@ -48,7 +48,7 @@ router.get('/scan/:username', publicLimiter, async (req, res, next) => {
 });
 
 // ─── GET /api/public/roast/:username ──────────────────────────
-router.get('/roast/:username', publicLimiter, async (req, res, next) => {
+router.get('/roast/:username', async (req, res, next) => {
   try {
     const { username } = req.params;
     const data = await getPublicUserProfile(username);
@@ -65,7 +65,7 @@ router.get('/roast/:username', publicLimiter, async (req, res, next) => {
 });
 
 // ─── POST /api/public/roadmap ──────────────────────────────────
-router.post('/roadmap', publicLimiter, async (req, res, next) => {
+router.post('/roadmap', async (req, res, next) => {
   try {
     const { currentRole, targetRole } = req.body;
     if (!currentRole || !targetRole) {
